@@ -1,10 +1,15 @@
 import { User } from '@src/database/entity';
 import { Repository } from 'typeorm';
 import { mock } from 'jest-mock-extended';
+import { dataSource } from '@src/database';
 
 export const repositoryMock = mock<Repository<any>>();
 
 describe('When create a new user', () => {
+  beforeEach(async () => {
+    const userRepository = dataSource.getRepository(User);
+    await userRepository.delete({});
+  });
   it('should return successfully when create a new user', async () => {
     const newUser: Partial<User> = {
       name: 'Alan',
@@ -19,6 +24,8 @@ describe('When create a new user', () => {
     const response = await global.testRequest.post('/api/users').send(newUser);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(expect.objectContaining(newUser));
+    expect(response.body).toEqual(
+      expect.objectContaining({ ...newUser, password: expect.any(String) })
+    );
   });
 });

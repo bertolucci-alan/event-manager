@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { routes } from './routes';
+import { routes } from '@src/routes';
 
 export class SetupServer {
   public server: Express = express();
@@ -35,4 +35,3 @@ export class SetupServer {
     this.server.use(cors());
   }
 }
-// export const app: Express = routes(new SetupServer().server);

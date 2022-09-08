@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import './util/module-alias';
 
 import { SetupServer } from './app';
 

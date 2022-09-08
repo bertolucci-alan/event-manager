@@ -11,7 +11,7 @@ describe('User functional test', () => {
       const response = await global.testRequest
         .post('/api/users')
         .send(newUser);
-      console.log(response);
+
       expect(response.status).toBe(200);
       expect(response.body).toEqual(expect.objectContaining(newUser));
     });

@@ -11,7 +11,6 @@ export class UserController {
       balance: 0,
       isAdmin: false,
     };
-
     return newUser;
   }
 }

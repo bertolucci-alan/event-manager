@@ -12,4 +12,9 @@ export const dataSource: DataSource = new DataSource({
   synchronize: true,
 });
 
-dataSource.initialize().then(() => console.log('Data source intialized'));
+(async () => {
+  await dataSource
+    .initialize()
+    .then(() => console.log('Data source intialized'));
+  console.log('tá chamando aqui');
+})();

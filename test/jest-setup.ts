@@ -7,6 +7,8 @@ import { dataSource } from '@src/database/index';
 
 beforeAll(async () => {
   const server = new SetupServer();
-  await dataSource.initialize().then(() => console.log('INICIOU NO TESTE'));
+  await dataSource
+    .initialize()
+    .then(() => console.log('DataSource initialize in jest-setup'));
   global.testRequest = supertest(server.getApp());
 });

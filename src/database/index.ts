@@ -16,5 +16,4 @@ export const dataSource: DataSource = new DataSource({
   await dataSource
     .initialize()
     .then(() => console.log('Data source intialized'));
-  console.log('tá chamando aqui');
 })();

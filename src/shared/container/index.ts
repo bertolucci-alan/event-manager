@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import '../../util/module-alias';
 import { container } from 'tsyringe';
+import '@src/modules/users/providers/HashProvider';
 
 import { UserRepository } from '@modules/users/repositories/UserRepository';
 import { IUserRepository } from '@modules/users/repositories/interfaces/IUserRepository';

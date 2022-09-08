@@ -4,7 +4,7 @@ import { AppError } from '../errors/app-error';
 import { Session } from '../interfaces/Session';
 import { Token } from '../interfaces/Token';
 
-export function currenteUserChecker(action: Action): Session {
+export function currentUserChecker(action: Action): Session {
   const header = action.request.headers.authorization;
   if (!header) throw new AppError('Token not present', 401);
 

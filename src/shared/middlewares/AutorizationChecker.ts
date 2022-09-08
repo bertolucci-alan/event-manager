@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 import { AppError } from '../errors/app-error';
 import { Token } from '../interfaces/Token';
 
-export function autorizationChecker(action: Action): boolean {
+export function authorizationChecker(action: Action): boolean {
   const header = action.request.headers.authorization;
   if (!header) throw new AppError('Token not present', 401);
 

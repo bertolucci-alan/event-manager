@@ -1,3 +1,4 @@
+import '@src/shared/container';
 import supertest from 'supertest';
 import { SetupServer } from '@src/app';
 

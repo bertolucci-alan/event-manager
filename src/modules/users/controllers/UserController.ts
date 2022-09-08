@@ -1,16 +1,17 @@
 import { Body, JsonController, Post } from 'routing-controllers';
+import { CreateUserUseCase } from '../useCases/createUserUseCase/CreateUserUseCase';
+import { container } from 'tsyringe';
 
 @JsonController('/users')
 export class UserController {
   @Post('/')
   async create(@Body() body: any): Promise<any> {
-    const newUser = {
-      name: 'Alan',
-      email: 'alan@gmail.com',
-      password: '123',
-      balance: 0,
-      isAdmin: false,
-    };
-    return newUser;
+    try {
+      const createUser: CreateUserUseCase =
+        container.resolve(CreateUserUseCase);
+      return await createUser.execute(body);
+    } catch (err) {
+      console.log(`Error create user: ${err}`);
+    }
   }
 }

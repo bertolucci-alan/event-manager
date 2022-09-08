@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import './util/module-alias';
+import '@src/database/index';
 import '@src/shared/container';
 
 import { SetupServer } from './app';

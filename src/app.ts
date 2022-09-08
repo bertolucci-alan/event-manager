@@ -2,11 +2,12 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { routes } from '@src/routes';
+import config from 'config';
 
 export class SetupServer {
   public server: Express = express();
 
-  constructor(private port = 3000) {
+  constructor(private port = config.get('App.port') || 3000) {
     this.setupExpress();
     this.cors();
   }

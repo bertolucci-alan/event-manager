@@ -1,14 +1,13 @@
+import { dataSource } from '@src/database';
+import { User } from '@src/database/entity';
+import { DeepPartial, Repository } from 'typeorm';
 import { IUserRepository } from './interfaces/IUserRepository';
 
 export class UserRepository implements IUserRepository {
-  async create(data: any): Promise<any> {
-    const newUser = {
-      name: 'Alan',
-      email: 'alan@gmail.com',
-      password: '123',
-      balance: 0,
-      isAdmin: false,
-    };
-    return newUser;
+  private repository: Repository<User> = dataSource.getRepository(User);
+
+  async create(data: DeepPartial<User>): Promise<User> {
+    const user = this.repository.create({ ...data, isAdmin: false });
+    return await this.repository.save(user);
   }
 }

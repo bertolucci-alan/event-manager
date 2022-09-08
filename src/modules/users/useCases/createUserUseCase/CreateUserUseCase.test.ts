@@ -1,14 +1,14 @@
-import { UserRepository } from '../../repositories/UserRepository';
+import { User } from '@src/database/entity';
+import { Repository } from 'typeorm';
+import { mock } from 'jest-mock-extended';
 import { CreateUserUseCase } from './CreateUserUseCase';
 
-jest.mock('@src/modules/users/repositories/UserRepository');
+export const repositoryMock = mock<Repository<any>>();
 
 describe('Create User UseCase unit test', () => {
-  const mockedUserRepository =
-    new UserRepository() as jest.Mocked<UserRepository>;
   it('should successfly when create a new user', async () => {
     const date = new Date();
-    const newUser: any = {
+    const newUser: User = {
       id: 1,
       name: 'du',
       email: 'alan@gmail.com',
@@ -18,12 +18,9 @@ describe('Create User UseCase unit test', () => {
       created_at: date,
       updated_at: date,
     };
-
-    mockedUserRepository.create.mockResolvedValue(newUser);
-    const createUserUseCase = new CreateUserUseCase(mockedUserRepository);
-
-    const response = await createUserUseCase.execute(newUser);
-
+    repositoryMock.create.mockResolvedValue(newUser);
+    const createUser = new CreateUserUseCase(repositoryMock);
+    const response = await createUser.execute(newUser);
     expect(response).toEqual(newUser);
   });
 });

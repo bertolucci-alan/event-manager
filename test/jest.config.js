@@ -9,6 +9,6 @@ const rootConfig = require(`${root}/jest.config.js`);
 module.exports = {...rootConfig, ...{
   rootDir: root,
   displayName: "end2end-tests",
-  setupFilesAfterEnv: ["<rootDir>/test/jest-setup.ts"],
+  setupFilesAfterEnv: ["./src/__test__/setup/setupReflectMetadata.ts","<rootDir>/test/jest-setup.ts"],
   testMatch: ["<rootDir>/test/**/*.test.ts"],
 }}

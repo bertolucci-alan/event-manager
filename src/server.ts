@@ -1,5 +1,13 @@
-import express from 'express';
+import 'reflect-metadata';
 
-const app = express();
+import { SetupServer } from './app';
 
-app.listen(3000, () => console.log('Server is running'));
+(async (): Promise<void> => {
+  try {
+    const server = new SetupServer();
+    await server.init();
+    server.start();
+  } catch (err) {
+    console.log(`App exited with error: ${err}`);
+  }
+})();

@@ -1,33 +1,38 @@
 import express, { Express } from 'express';
-import { routes } from './routes';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { routes } from './routes';
 
 export class SetupServer {
-  constructor(private port = 3000) {}
-  public app: Express = routes(express());
+  public server: Express = express();
 
-  public init(): void {
+  constructor(private port = 3000) {
     this.setupExpress();
+    this.cors();
   }
 
   public start(): void {
-    this.app.listen(this.port, () =>
+    this.getApp().listen(this.port, () =>
       console.log(`Server is running on port ${this.port}`)
     );
   }
 
   public getApp(): Express {
-    return this.app;
+    const app: Express = routes(this.server);
+    return app;
   }
 
   private setupExpress(): void {
-    this.app.use(bodyParser.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(
-      cors({
-        origin: '*',
+    this.server.use(bodyParser.json());
+    this.server.use(
+      express.urlencoded({
+        extended: true,
       })
     );
   }
+
+  private cors(): void {
+    this.server.use(cors());
+  }
 }
+// export const app: Express = routes(new SetupServer().server);

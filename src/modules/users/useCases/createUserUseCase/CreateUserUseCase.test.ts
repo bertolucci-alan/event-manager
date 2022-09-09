@@ -1,9 +1,9 @@
 import { User } from '@src/database/entity';
-import { Repository } from 'typeorm';
 import { mock } from 'jest-mock-extended';
+import { UserRepository } from '../../repositories/UserRepository';
 import { CreateUserUseCase } from './CreateUserUseCase';
 
-export const repositoryMock = mock<Repository<any>>();
+export const repositoryMock = mock<UserRepository>();
 
 describe('Create User UseCase unit test', () => {
   it('should successfly when create a new user', async () => {
@@ -19,8 +19,10 @@ describe('Create User UseCase unit test', () => {
       updated_at: date,
     };
     repositoryMock.create.mockResolvedValue(newUser);
+
     const createUser = new CreateUserUseCase(repositoryMock);
     const response = await createUser.execute(newUser);
+
     expect(response).toEqual(newUser);
   });
 });

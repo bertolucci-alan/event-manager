@@ -5,7 +5,6 @@ import { inject, injectable } from 'tsyringe';
 import { AuthenticateUserDTO } from '../../dtos/AuthenticateUserDTO';
 import { IHashProvider } from '../../providers/HashProvider/interfaces/IHashProvider';
 import { IUserRepository } from '../../repositories/interfaces/IUserRepository';
-import { UserRepository } from '../../repositories/UserRepository';
 
 @injectable()
 export class AuthenticateUseCase {

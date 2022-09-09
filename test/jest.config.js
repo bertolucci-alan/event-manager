@@ -1,0 +1,14 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
+const { resolve } = require('path');
+// eslint-disable-next-line no-undef
+const root = resolve(__dirname, '..');
+// eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
+const rootConfig = require(`${root}/jest.config.js`);
+
+// eslint-disable-next-line no-undef
+module.exports = {...rootConfig, ...{
+  rootDir: root,
+  displayName: "end2end-tests",
+  setupFilesAfterEnv: ["./src/__test__/setup/setupReflectMetadata.ts","<rootDir>/test/jest-setup.ts"],
+  testMatch: ["<rootDir>/test/**/*.test.ts"],
+}}

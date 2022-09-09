@@ -4,6 +4,7 @@ import { mock } from 'jest-mock-extended';
 import { dataSource } from '@src/database';
 import { UserRepository } from '@src/modules/users/repositories/UserRepository';
 import { CreateUserDTO } from '@src/modules/users/dtos/CreateUserDTO';
+import { AuthenticateUserDTO } from '@src/modules/users/dtos/AuthenticateUserDTO';
 
 export const repositoryMock = mock<Repository<any>>();
 const userRepository = new UserRepository();
@@ -84,6 +85,16 @@ describe('User functional tests', () => {
       expect(response.body).toEqual(
         expect.objectContaining({ token: expect.any(String) })
       );
+    });
+
+    it('shold return 401 when failed authentication', async () => {
+      const user: AuthenticateUserDTO = {
+        email: 'incorrect_email@gmail.com',
+        password: 'incorrect-password',
+      };
+      const response = await global.testRequest.post('/api/auth').send(user);
+
+      expect(response.statusCode).toBe(401);
     });
   });
 });

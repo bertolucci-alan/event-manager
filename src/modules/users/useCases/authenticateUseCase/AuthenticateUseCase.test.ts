@@ -57,7 +57,7 @@ describe('Authenticate Case unit test', () => {
     ).rejects.toBeNull();
   });
 
-  it.only('should return false when password does not match', async () => {
+  it('should return false when password does not match', async () => {
     const user: User = {
       id: 1,
       name: 'Alan',

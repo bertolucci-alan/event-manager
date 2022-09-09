@@ -48,11 +48,11 @@ export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
     };
   }
 
-  public internalServerError(err: unknown) {
+  public internalServerError(error: Error) {
     return {
       name: getReasonPhrase(500),
       status: 500,
-      message: `Internal Server Error: ${err}`,
+      message: error.message,
     };
   }
 }

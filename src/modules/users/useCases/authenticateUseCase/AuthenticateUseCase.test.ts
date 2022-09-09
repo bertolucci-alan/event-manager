@@ -36,4 +36,52 @@ describe('Authenticate Case unit test', () => {
     expect(response.token).toEqual(expect.any(String));
     expect(response.user).toEqual(newUser);
   });
+
+  it('should return null when not found an user', async () => {
+    const user = {
+      email: 'alan2@gmail.com',
+      password: '123123123',
+    };
+    userRepositoryMock.findByEmail.mockRejectedValue(null);
+
+    const authCase = new AuthenticateUseCase(
+      userRepositoryMock,
+      hashProviderMock
+    );
+
+    await expect(
+      authCase.execute({
+        email: user.email,
+        password: user.password,
+      })
+    ).rejects.toBeNull();
+  });
+
+  it.only('should return false when password does not match', async () => {
+    const user: User = {
+      id: 1,
+      name: 'Alan',
+      email: 'alan@gmail.com',
+      password: '123123123',
+      balance: 0,
+      isAdmin: false,
+      created_at: date,
+      updated_at: date,
+    };
+
+    userRepositoryMock.findByEmail.mockResolvedValue(user);
+    hashProviderMock.comparePassword.mockRejectedValue(false);
+
+    const authCase = new AuthenticateUseCase(
+      userRepositoryMock,
+      hashProviderMock
+    );
+
+    await expect(
+      authCase.execute({
+        email: user.email,
+        password: user.password,
+      })
+    ).rejects.toBeFalsy();
+  });
 });

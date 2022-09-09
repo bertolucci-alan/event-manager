@@ -3,6 +3,7 @@ import { CreateUserUseCase } from '../useCases/createUserUseCase/CreateUserUseCa
 import { container } from 'tsyringe';
 import { User } from '@src/database/entity';
 import { CreateUserDTO } from '../dtos/CreateUserDTO';
+import { AppError } from '@src/shared/errors/app-error';
 
 @JsonController('/users')
 export class UserController {
@@ -13,8 +14,7 @@ export class UserController {
         container.resolve(CreateUserUseCase);
       return await createUser.execute(body);
     } catch (err) {
-      console.log(`Error create user: ${err}`);
-      throw new Error(`err: ${err}`);
+      throw new AppError(`Error during user creation: ${err}`);
     }
   }
 }

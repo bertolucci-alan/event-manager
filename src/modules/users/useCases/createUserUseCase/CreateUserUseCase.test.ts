@@ -3,24 +3,24 @@ import { mock } from 'jest-mock-extended';
 import { UserRepository } from '../../repositories/UserRepository';
 import { CreateUserUseCase } from './CreateUserUseCase';
 
-export const repositoryMock = mock<UserRepository>();
+export const userRepositoryMock = mock<UserRepository>();
+const date = new Date();
 
 describe('Create User UseCase unit test', () => {
   it('should successfly when create a new user', async () => {
-    const date = new Date();
     const newUser: User = {
       id: 1,
-      name: 'du',
+      name: 'Alan',
       email: 'alan@gmail.com',
-      password: '123',
+      password: '123123123',
       balance: 0,
       isAdmin: false,
       created_at: date,
       updated_at: date,
     };
-    repositoryMock.create.mockResolvedValue(newUser);
+    userRepositoryMock.create.mockResolvedValue(newUser);
 
-    const createUser = new CreateUserUseCase(repositoryMock);
+    const createUser = new CreateUserUseCase(userRepositoryMock);
     const response = await createUser.execute(newUser);
 
     expect(response).toEqual(newUser);

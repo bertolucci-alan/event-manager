@@ -1,3 +1,4 @@
+import { User } from '@src/database/entity';
 import { Body, JsonController, Post } from 'routing-controllers';
 import { container } from 'tsyringe';
 import { AuthenticateUserDTO } from '../dtos/AuthenticateUserDTO';
@@ -6,12 +7,15 @@ import { AuthenticateUseCase } from '../useCases/authenticateUseCase/Authenticat
 @JsonController('/auth')
 export class AuthController {
   @Post('')
-  async auth(@Body() body: AuthenticateUserDTO) {
+  async auth(
+    @Body() body: AuthenticateUserDTO
+  ): Promise<{ user: User; token: string }> {
     try {
       const authCase = container.resolve(AuthenticateUseCase);
       return await authCase.execute(body);
     } catch (err) {
       console.log(`Error during authenticate: ${err}`);
+      throw new Error(`err: ${err}`);
     }
   }
 }

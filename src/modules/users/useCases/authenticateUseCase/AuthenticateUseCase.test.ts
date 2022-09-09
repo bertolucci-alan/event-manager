@@ -12,9 +12,9 @@ describe('Authenticate Case unit test', () => {
   it('should return successfully when user authenticate', async () => {
     const newUser: User = {
       id: 1,
-      name: 'du',
+      name: 'Alan',
       email: 'alan@gmail.com',
-      password: '123',
+      password: '123123123',
       balance: 0,
       isAdmin: false,
       created_at: date,

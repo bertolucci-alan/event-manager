@@ -6,6 +6,14 @@ import { AuthenticateUserDTO } from '../../dtos/AuthenticateUserDTO';
 import { IHashProvider } from '../../providers/HashProvider/interfaces/IHashProvider';
 import { IUserRepository } from '../../repositories/interfaces/IUserRepository';
 
+export interface ResponseAuthenticateUser {
+  user?: User;
+  token?: string;
+  error?: string;
+  description?: string;
+  code?: number;
+}
+
 @injectable()
 export class AuthenticateUseCase {
   constructor(
@@ -16,15 +24,15 @@ export class AuthenticateUseCase {
   async execute({
     email,
     password,
-  }: AuthenticateUserDTO): Promise<{ user: User; token: string }> {
+  }: AuthenticateUserDTO): Promise<ResponseAuthenticateUser> {
     const userExists = await this.userRepository.findByEmail(email);
-    if (!userExists) throw new AppError('User not found', 404);
+    if (!userExists) throw new AppError('email/password invalid', 401);
 
-    const passwordMatch = this.hashProvider.comparePassword(
+    const passwordMatch = await this.hashProvider.comparePassword(
       password,
       userExists.password
     );
-    if (!passwordMatch) throw new AppError('Password does not match', 401);
+    if (!passwordMatch) throw new AppError('email/password invalid', 401);
 
     const token: string = sign({ id: userExists.id }, 'secret', {
       expiresIn: 3600,
@@ -33,6 +41,7 @@ export class AuthenticateUseCase {
     return {
       user: userExists,
       token,
+      code: 200,
     };
   }
 }

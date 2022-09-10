@@ -1,5 +1,6 @@
 import { dataSource } from '@src/database';
 import { Event, Institute, User } from '@src/database/entity';
+import { DeepPartial, FindOneOptions } from 'typeorm';
 import { CreateEventDTO } from '../dtos/CreateEventDTO';
 import { IEventRepository } from './interfaces/IEventRepository';
 
@@ -17,5 +18,15 @@ export class EventRepository implements IEventRepository {
       institute: institute,
     });
     return await this.repository.save(event);
+  }
+
+  async update(id: number, data: DeepPartial<Event>): Promise<Event> {
+    const event = await this.repository.save({ id, ...data });
+    return event;
+  }
+
+  async findById(id: number, options?: FindOneOptions<Event>): Promise<Event> {
+    const event = await this.repository.findOne({ where: { id }, ...options });
+    return event as Event;
   }
 }

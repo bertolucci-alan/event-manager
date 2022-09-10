@@ -5,10 +5,12 @@ import {
   Body,
   CurrentUser,
   JsonController,
+  Param,
   Post,
 } from 'routing-controllers';
 import { container } from 'tsyringe';
 import { CreateEventDTO } from '../dtos/CreateEventDTO';
+import { AttendEventUseCase } from '../useCases/attendEventUseCase/attendEventUseCase';
 import { CreateEventUseCase } from '../useCases/createEventUseCase/CreateEventUseCase';
 
 @JsonController('/events')
@@ -21,5 +23,15 @@ export class EventController {
   ): Promise<Event> {
     const createEvent = container.resolve(CreateEventUseCase);
     return await createEvent.execute(body, id);
+  }
+
+  @Authorized()
+  @Post('/attend/:eventId')
+  async attend(
+    @Param('eventId') eventId: number,
+    @CurrentUser() { id }: Session
+  ): Promise<Event> {
+    const attendEvent = container.resolve(AttendEventUseCase);
+    return await attendEvent.execute(eventId, id);
   }
 }

@@ -11,7 +11,7 @@ const date = new Date();
 describe('Authenticate Case unit test', () => {
   it('should return successfully when user authenticate', async () => {
     const newUser: User = {
-      id: 1,
+      id: 55,
       name: 'Alan',
       email: 'alan@gmail.com',
       password: '123123123',
@@ -19,6 +19,8 @@ describe('Authenticate Case unit test', () => {
       isAdmin: false,
       created_at: date,
       updated_at: date,
+      events: [],
+      users_events: [],
     };
 
     userRepositoryMock.findByEmail.mockResolvedValue(newUser);
@@ -59,7 +61,7 @@ describe('Authenticate Case unit test', () => {
 
   it('should return false when password does not match', async () => {
     const user: User = {
-      id: 1,
+      id: 55,
       name: 'Alan',
       email: 'alan@gmail.com',
       password: '123123123',
@@ -67,6 +69,8 @@ describe('Authenticate Case unit test', () => {
       isAdmin: false,
       created_at: date,
       updated_at: date,
+      events: [],
+      users_events: [],
     };
 
     userRepositoryMock.findByEmail.mockResolvedValue(user);

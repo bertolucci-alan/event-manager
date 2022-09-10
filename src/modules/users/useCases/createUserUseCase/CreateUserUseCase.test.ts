@@ -10,7 +10,7 @@ const date = new Date();
 describe('Create User UseCase unit test', () => {
   it('should successfly when create a new user', async () => {
     const newUser: User = {
-      id: 1,
+      id: 55,
       name: 'Alan',
       email: 'alan@gmail.com',
       password: '123123123',
@@ -18,7 +18,10 @@ describe('Create User UseCase unit test', () => {
       isAdmin: false,
       created_at: date,
       updated_at: date,
+      events: [],
+      users_events: [],
     };
+
     userRepositoryMock.create.mockResolvedValue(newUser);
 
     const createUser = new CreateUserUseCase(userRepositoryMock);

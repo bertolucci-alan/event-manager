@@ -10,24 +10,26 @@ const userRepositoryMock = mock<UserRepository>();
 const date = new Date();
 
 describe('Create Institute useCase unit test', () => {
-  beforeEach(async () => {
-    await new InstituteRepository().deleteAll();
-    await new UserRepository().deleteAll();
-  });
-
-  it('should return successfully when create a new institute', async () => {
-    const newUser: Partial<User> = {
+  it.only('should return successfully when create a new institute', async () => {
+    // userRepositoryMock.findById.mockReset();
+    // instituteRepositoryMock.create.mockReset();
+    const user: User = {
+      id: 55,
       name: 'Alan',
-      email: 'alan2@gmail.com',
+      email: 'alan@gmail.com',
       password: '123123123',
       balance: 0,
       isAdmin: false,
+      created_at: date,
+      updated_at: date,
+      events: [],
+      users_events: [],
     };
 
-    const user = await new UserRepository().create(newUser);
+    userRepositoryMock.findById.mockResolvedValue(user);
 
     const newInstitute: Institute = {
-      id: 1,
+      id: 30,
       name: 'Escola de Samba',
       CNPJ: 'XX. XXX. XXX/0001-XX',
       owner: user,
@@ -41,11 +43,12 @@ describe('Create Institute useCase unit test', () => {
       userRepositoryMock,
       instituteRepositoryMock
     );
-    const response = await createInstitute.execute(
-      { name: newInstitute.name, CNPJ: newInstitute.CNPJ },
-      newInstitute.owner.id
-    );
 
-    expect(response).toEqual(newInstitute);
+    expect(
+      await createInstitute.execute(
+        { name: newInstitute.name, CNPJ: newInstitute.CNPJ },
+        newInstitute.owner.id
+      )
+    ).toEqual(newInstitute);
   });
 });

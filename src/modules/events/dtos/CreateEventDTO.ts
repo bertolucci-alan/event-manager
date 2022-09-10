@@ -1,6 +1,7 @@
 import {
   IsDateString,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -17,6 +18,10 @@ export class CreateEventDTO {
   @IsString()
   @IsNotEmpty()
   rating: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  price: number;
 
   @IsDateString()
   @IsNotEmpty()

@@ -35,6 +35,9 @@ export class Event {
   rating: string;
 
   @Column()
+  price: number;
+
+  @Column()
   start_date: Date;
 
   @Column()

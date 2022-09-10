@@ -13,13 +13,11 @@ export class AttendEventUseCase {
 
   async execute(eventId: number, authId: number): Promise<Event> {
     const userExists = await this.userRepository.findById(authId);
-    console.log(userExists);
     if (!userExists) throw new AppError('User not found', 404);
 
     const eventExists = await this.eventRepository.findById(eventId, {
       relations: ['users'],
     });
-    console.log(eventExists);
     if (!eventExists) throw new AppError('Event not found', 404);
 
     const event = await this.eventRepository.update(eventId, {

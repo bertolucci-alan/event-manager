@@ -8,7 +8,7 @@ import {
 } from 'routing-controllers';
 import { container } from 'tsyringe';
 import { CreateInstituteDTO } from '../dtos/CreateInstituteDTO';
-import { CreateInstituteUseCase } from '../useCases/CreateInstituteUseCase';
+import { CreateInstituteUseCase } from '../useCases/createInstituteUseCase/CreateInstituteUseCase';
 
 @JsonController('/institutes')
 export class InstituteController {

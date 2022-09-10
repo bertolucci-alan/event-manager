@@ -3,10 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { hash } from 'bcrypt';
+import { Event } from './Event';
 
 @Entity('users')
 export class User {
@@ -27,6 +30,12 @@ export class User {
 
   @Column()
   isAdmin: boolean;
+
+  @OneToMany(() => Event, (events) => events.User)
+  events: Event[];
+
+  @ManyToMany(() => Event, (users) => users.users)
+  users_events: Event[];
 
   @CreateDateColumn()
   created_at: Date;

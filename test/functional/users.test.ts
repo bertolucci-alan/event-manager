@@ -1,18 +1,18 @@
 import { User } from '@src/database/entity';
 import { Repository } from 'typeorm';
 import { mock } from 'jest-mock-extended';
-import { dataSource } from '@src/database';
 import { UserRepository } from '@src/modules/users/repositories/UserRepository';
 import { CreateUserDTO } from '@src/modules/users/dtos/CreateUserDTO';
 import { AuthenticateUserDTO } from '@src/modules/users/dtos/AuthenticateUserDTO';
+import { InstituteRepository } from '@src/modules/institute/repositories/InstituteRepository';
 
 export const repositoryMock = mock<Repository<any>>();
 const userRepository = new UserRepository();
 
 describe('User functional tests', () => {
   beforeEach(async () => {
-    const userRepository = dataSource.getRepository(User);
-    await userRepository.delete({});
+    await new InstituteRepository().deleteAll();
+    await new UserRepository().deleteAll();
   });
 
   describe('When create a new user', () => {

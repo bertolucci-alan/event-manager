@@ -1,3 +1,4 @@
+import { Session } from '@src/shared/interfaces/Session';
 import {
   Authorized,
   Body,
@@ -15,11 +16,11 @@ export class InstituteController {
   @Post('/')
   async create(
     @Body() body: CreateInstituteDTO,
-    @CurrentUser() authId: number
+    @CurrentUser() { id }: Session
   ) {
     const createInstitute: CreateInstituteUseCase = container.resolve(
       CreateInstituteUseCase
     );
-    return await createInstitute.execute(body, authId);
+    return await createInstitute.execute(body, id);
   }
 }

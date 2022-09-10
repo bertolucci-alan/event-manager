@@ -5,4 +5,5 @@ export interface IUserRepository {
   create(data: CreateUserDTO): Promise<User>;
   findByEmail(email: string): Promise<User>;
   findById(id: number): Promise<User>;
+  deleteAll(): Promise<void>;
 }

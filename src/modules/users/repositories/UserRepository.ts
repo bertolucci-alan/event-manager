@@ -26,4 +26,8 @@ export class UserRepository implements IUserRepository {
     });
     return user as User;
   }
+
+  async deleteAll(): Promise<void> {
+    await this.repository.delete({});
+  }
 }

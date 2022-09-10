@@ -16,5 +16,5 @@ module.exports = {
         '@test/(.*)': '<rootDir>/test/$1',
         '@modules/(.*)': '<rootDir>/src/modules/$1',
     },
-  setupFilesAfterEnv: ["./src/__test__/setup/setupReflectMetadata.ts","<rootDir>/test/jest-setup.ts"]
+  setupFilesAfterEnv: ["./src/__test__/setup/setupReflectMetadata.ts"]
 }

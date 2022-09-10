@@ -15,7 +15,7 @@ export class CreateInstituteUseCase {
   async execute(data: CreateInstituteDTO, authId: number) {
     const user = await this.userRepository.findById(authId);
     if (!user) throw new AppError('User not found', 404);
-    console.log(user);
+
     const institute = await this.instituteRepository.create(data, user);
     return institute;
   }

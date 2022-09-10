@@ -1,19 +1,18 @@
+import { dataSource } from '@src/database';
 import { Institute, User } from '@src/database/entity';
 import { UserRepository } from '@src/modules/users/repositories/UserRepository';
+import { CreateUserUseCase } from '@src/modules/users/useCases/createUserUseCase/CreateUserUseCase';
 import { mock } from 'jest-mock-extended';
 import { InstituteRepository } from '../../repositories/InstituteRepository';
 import { CreateInstituteUseCase } from './CreateInstituteUseCase';
 
 const instituteRepositoryMock = mock<InstituteRepository>();
 const userRepositoryMock = mock<UserRepository>();
-
 const date = new Date();
 
 describe('Create Institute useCase unit test', () => {
   it.only('should return successfully when create a new institute', async () => {
-    // userRepositoryMock.findById.mockReset();
-    // instituteRepositoryMock.create.mockReset();
-    const user: User = {
+    const newUser: User = {
       id: 55,
       name: 'Alan',
       email: 'alan@gmail.com',
@@ -26,7 +25,16 @@ describe('Create Institute useCase unit test', () => {
       users_events: [],
     };
 
-    userRepositoryMock.findById.mockResolvedValue(user);
+    userRepositoryMock.create.mockResolvedValue(newUser);
+
+    const createUser = new CreateUserUseCase(userRepositoryMock);
+
+    const user = await createUser.execute({
+      name: newUser.name,
+      email: newUser.email,
+      password: newUser.password,
+      balance: newUser.balance,
+    });
 
     const newInstitute: Institute = {
       id: 30,
@@ -39,16 +47,18 @@ describe('Create Institute useCase unit test', () => {
 
     instituteRepositoryMock.create.mockResolvedValue(newInstitute);
 
+    userRepositoryMock.findById.mockResolvedValue(user);
+
     const createInstitute = new CreateInstituteUseCase(
       userRepositoryMock,
       instituteRepositoryMock
     );
 
-    expect(
-      await createInstitute.execute(
-        { name: newInstitute.name, CNPJ: newInstitute.CNPJ },
-        newInstitute.owner.id
-      )
-    ).toEqual(newInstitute);
+    const institute = await createInstitute.execute(
+      { name: newInstitute.name, CNPJ: newInstitute.CNPJ },
+      user.id
+    );
+
+    expect(institute).toEqual(newInstitute);
   });
 });

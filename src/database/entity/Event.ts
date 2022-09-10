@@ -13,13 +13,6 @@ import {
 import { User } from '.';
 import { Institute } from './Institute';
 
-enum Rating {
-  FREE = 'Free for all audiences',
-  OVER10 = 'Not recommended for children under 10 years old',
-  OVER14 = 'Not recommended for children under 14',
-  OVER18 = 'Not recommended for under 18s',
-}
-
 @Entity({ name: 'events' })
 export class Event {
   @PrimaryGeneratedColumn()

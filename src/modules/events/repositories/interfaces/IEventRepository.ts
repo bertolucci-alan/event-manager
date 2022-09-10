@@ -10,4 +10,5 @@ export interface IEventRepository {
   ): Promise<Event>;
   update(id: number, data: DeepPartial<Event>): Promise<Event>;
   findById(id: number, options?: FindOneOptions<Event>): Promise<Event>;
+  checksIfTheEventBelongsToUser(event: Event, user: User): Promise<boolean>;
 }

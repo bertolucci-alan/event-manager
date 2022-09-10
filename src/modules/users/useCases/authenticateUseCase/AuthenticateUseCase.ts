@@ -32,7 +32,6 @@ export class AuthenticateUseCase {
       userExists.password
     );
     if (!passwordMatch) throw new AppError('email/password invalid', 401);
-
     const token: string = this.jwtProvider.generateToken({ id: userExists.id });
 
     return {

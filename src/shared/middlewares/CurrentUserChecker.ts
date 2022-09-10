@@ -1,4 +1,4 @@
-import { decode } from 'jsonwebtoken';
+import { JWTProvider } from '@src/modules/users/providers/JWTProvider/JWTProvider';
 import { Action } from 'routing-controllers';
 import { AppError } from '../errors/app-error';
 import { Session } from '../interfaces/Session';
@@ -12,7 +12,7 @@ export function currentUserChecker(action: Action): Session {
   if (!token) throw new AppError('Token not present', 401);
 
   try {
-    const user = decode(token) as Token;
+    const user = new JWTProvider().decodedToken(token) as Token;
     return user;
   } catch (err) {
     throw new AppError('Token invalid', 401);

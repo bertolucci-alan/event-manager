@@ -1,10 +1,19 @@
-import { Body, Get, JsonController, Post } from 'routing-controllers';
+import {
+  Authorized,
+  Body,
+  CurrentUser,
+  Get,
+  JsonController,
+  Param,
+  Post,
+} from 'routing-controllers';
 import { CreateUserUseCase } from '../useCases/createUserUseCase/CreateUserUseCase';
 import { container } from 'tsyringe';
 import { User } from '@src/database/entity';
 import { CreateUserDTO } from '../dtos/CreateUserDTO';
 import { AppError } from '@src/shared/errors/app-error';
-import { ListUserUseCase } from '../useCases/listUserUseCase/ListUserUseCase';
+import { ListUserByEventUseCase } from '../useCases/listUserByEventUseCase/ListUserByEventUseCase';
+import { Session } from '@src/shared/interfaces/Session';
 
 @JsonController('/users')
 export class UserController {
@@ -19,9 +28,13 @@ export class UserController {
     }
   }
 
-  @Get('/')
-  async get(): Promise<User[]> {
-    const listUser = container.resolve(ListUserUseCase);
-    return await listUser.execute();
+  @Authorized()
+  @Get('/:eventId')
+  async getUserByEvent(
+    @Param('eventId') eventId: number,
+    @CurrentUser() { id }: Session
+  ): Promise<User[]> {
+    const listUserByEvent = container.resolve(ListUserByEventUseCase);
+    return await listUserByEvent.execute(id, eventId);
   }
 }

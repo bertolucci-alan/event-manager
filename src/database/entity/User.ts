@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { hash } from 'bcrypt';
 import { Event } from './Event';
+import { Institute } from './Institute';
 
 @Entity('users')
 export class User {
@@ -31,8 +32,12 @@ export class User {
   @Column()
   isAdmin: boolean;
 
-  //users_events relationship
-  @OneToMany(() => Event, (events) => events.users)
+  //user institutes relationship
+  @OneToMany(() => Institute, (institutes) => institutes.owner)
+  institutes: Institute[];
+
+  //user events relationship
+  @OneToMany(() => Event, (events) => events.owner)
   events: Event[];
 
   //users_events relationship

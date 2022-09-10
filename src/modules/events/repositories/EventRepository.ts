@@ -1,6 +1,6 @@
 import { dataSource } from '@src/database';
 import { Event, Institute, User } from '@src/database/entity';
-import { DeepPartial, FindOneOptions } from 'typeorm';
+import { DeepPartial, FindOneOptions, FindOptionsWhere } from 'typeorm';
 import { CreateEventDTO } from '../dtos/CreateEventDTO';
 import { IEventRepository } from './interfaces/IEventRepository';
 
@@ -28,5 +28,19 @@ export class EventRepository implements IEventRepository {
   async findById(id: number, options?: FindOneOptions<Event>): Promise<Event> {
     const event = await this.repository.findOne({ where: { id }, ...options });
     return event as Event;
+  }
+
+  async checksIfTheEventBelongsToUser(
+    event: Event,
+    user: User
+  ): Promise<boolean> {
+    console.log(user.id);
+    const eventUser = await this.repository.findOne({
+      relations: ['owner', 'users'],
+    });
+
+    console.log(eventUser);
+
+    return eventUser ? true : false;
   }
 }

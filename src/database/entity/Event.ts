@@ -5,6 +5,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -37,12 +38,12 @@ export class Event {
   end_date: Date;
 
   //institute relationship
-  @OneToOne(() => Institute)
+  @ManyToOne(() => Institute, (Institute) => Institute.events)
   @JoinColumn()
   institute: Institute;
 
   //owner relationship
-  @OneToOne(() => User)
+  @ManyToOne(() => User, (User) => User.events)
   @JoinColumn()
   owner: User;
 

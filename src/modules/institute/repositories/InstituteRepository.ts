@@ -1,6 +1,6 @@
 import { dataSource } from '@src/database';
 import { Institute, User } from '@src/database/entity';
-import { FindOptionsWhere } from 'typeorm';
+import { FindOneOptions, FindOptionsWhere } from 'typeorm';
 import { IInstituteRepository } from './interfaces/IInstituteRepository';
 
 export class InstituteRepository implements IInstituteRepository {
@@ -13,11 +13,11 @@ export class InstituteRepository implements IInstituteRepository {
     return await this.repository.save(institute);
   }
 
-  async findByUser(user: User): Promise<Institute> {
-    const institute = await this.repository.findOneBy({
-      owner: user.id as FindOptionsWhere<User>,
+  async findByUser(user: User): Promise<Institute | null> {
+    const institute = await this.repository.findOne({
+      where: { owner: user as FindOptionsWhere<User> },
     });
-    return institute as Institute;
+    return institute;
   }
 
   async deleteAll(): Promise<void> {

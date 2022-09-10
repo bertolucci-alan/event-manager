@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Event } from './Event';
 import { User } from './User';
 
 @Entity('institutes')
@@ -20,7 +22,12 @@ export class Institute {
   @Column({ unique: true })
   CNPJ: string;
 
-  @OneToOne(() => User)
+  //institute events relationship
+  @OneToMany(() => Event, (events) => events.institute)
+  events: Event[];
+
+  //owner institutes relationship
+  @ManyToOne(() => User, (User) => User.events)
   @JoinColumn()
   owner: User;
 

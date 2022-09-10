@@ -1,7 +1,7 @@
 // import { dataSource } from '@src/database';
 import { dataSource } from '@src/database/index';
-import { User } from '@src/database/entity';
-import { DeepPartial } from 'typeorm';
+import { Event, User } from '@src/database/entity';
+import { DeepPartial, FindOptionsWhere } from 'typeorm';
 import { IUserRepository } from './interfaces/IUserRepository';
 
 export class UserRepository implements IUserRepository {
@@ -20,7 +20,7 @@ export class UserRepository implements IUserRepository {
   async findByEmail(email: string): Promise<User> {
     const user = await this.repository.findOne({
       where: { email },
-      select: ['name', 'email', 'password', 'balance', 'isAdmin'],
+      select: ['id', 'name', 'email', 'password', 'balance', 'isAdmin'],
     });
     return user as User;
   }
@@ -30,6 +30,16 @@ export class UserRepository implements IUserRepository {
       where: { id },
     });
     return user as User;
+  }
+
+  async findByEvent(event: Event): Promise<User[]> {
+    const users = await this.repository.find({
+      relations: ['users_events'],
+      where: {
+        users_events: event as FindOptionsWhere<Event>,
+      },
+    });
+    return users;
   }
 
   async deleteAll(): Promise<void> {

@@ -1,7 +1,7 @@
 // import { dataSource } from '@src/database';
 import { dataSource } from '@src/database/index';
 import { User } from '@src/database/entity';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial } from 'typeorm';
 import { IUserRepository } from './interfaces/IUserRepository';
 
 export class UserRepository implements IUserRepository {
@@ -16,6 +16,13 @@ export class UserRepository implements IUserRepository {
     const user = await this.repository.findOne({
       where: { email },
       select: ['name', 'email', 'password', 'balance', 'isAdmin'],
+    });
+    return user as User;
+  }
+
+  async findById(id: number): Promise<User> {
+    const user = await this.repository.findOne({
+      where: { id },
     });
     return user as User;
   }

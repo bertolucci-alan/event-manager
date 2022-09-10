@@ -7,11 +7,8 @@ import { IHashProvider } from '../../providers/HashProvider/interfaces/IHashProv
 import { IUserRepository } from '../../repositories/interfaces/IUserRepository';
 
 export interface ResponseAuthenticateUser {
-  user?: User;
-  token?: string;
-  error?: string;
-  description?: string;
-  code?: number;
+  user: User;
+  token: string;
 }
 
 @injectable()
@@ -41,7 +38,6 @@ export class AuthenticateUseCase {
     return {
       user: userExists,
       token,
-      code: 200,
     };
   }
 }

@@ -5,7 +5,6 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
-  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -30,9 +29,9 @@ export class Event {
   name: string;
 
   @Column()
-  description: string;
+  description?: string;
 
-  @Column({ default: Rating.FREE, type: 'enum', enum: Rating })
+  @Column()
   rating: string;
 
   @Column()
@@ -41,17 +40,17 @@ export class Event {
   @Column()
   end_date: Date;
 
+  //institute relationship
   @OneToOne(() => Institute)
   @JoinColumn()
   institute: Institute;
 
-  @ManyToOne(() => User, (User) => User.events)
-  @JoinColumn({ name: 'user_id' })
-  User: User;
+  //owner relationship
+  @OneToOne(() => User)
+  @JoinColumn()
+  owner: User;
 
-  @Column()
-  user_id: number;
-
+  //users_events relationship
   @ManyToMany(() => User, (users) => users.users_events)
   @JoinTable()
   users: User[];

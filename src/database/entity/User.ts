@@ -31,9 +31,11 @@ export class User {
   @Column()
   isAdmin: boolean;
 
-  @OneToMany(() => Event, (events) => events.User)
+  //users_events relationship
+  @OneToMany(() => Event, (events) => events.users)
   events: Event[];
 
+  //users_events relationship
   @ManyToMany(() => Event, (users) => users.users)
   users_events: Event[];
 

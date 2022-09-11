@@ -34,7 +34,7 @@ describe('CreateEventUseCase unit test', () => {
       created_at: date,
       updated_at: date,
       events: [],
-      ownerId: 0,
+      ownerId: user.id,
     };
 
     const newEvent: Event = {

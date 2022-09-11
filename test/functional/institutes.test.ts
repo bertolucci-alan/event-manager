@@ -34,10 +34,12 @@ describe('Institute functional tests', () => {
       const newInstitute: Institute = {
         name: 'Escola de Samba',
         CNPJ: 'XX. XXX. XXX/0001-XX',
-        id: 0,
+        id: 10,
         owner: user,
         created_at: date,
         updated_at: date,
+        events: [],
+        ownerId: newUser.id,
       };
 
       userRepositoryMock.findById.mockResolvedValue(user);

@@ -10,7 +10,7 @@ import {
 } from 'routing-controllers';
 import { container } from 'tsyringe';
 import { CreateEventDTO } from '../dtos/CreateEventDTO';
-import { AttendEventUseCase } from '../useCases/attendEventUseCase/attendEventUseCase';
+import { AttendEventUseCase } from '../useCases/attendEventUseCase/AttendEventUseCase';
 import { CreateEventUseCase } from '../useCases/createEventUseCase/CreateEventUseCase';
 
 @JsonController('/events')

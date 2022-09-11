@@ -34,9 +34,8 @@ export class UserRepository implements IUserRepository {
 
   async findByEvent(event: Event): Promise<User[]> {
     const users = await this.repository.find({
-      relations: ['users_events'],
       where: {
-        users_events: event as FindOptionsWhere<Event>,
+        users_events: { id: event.id },
       },
     });
     return users;

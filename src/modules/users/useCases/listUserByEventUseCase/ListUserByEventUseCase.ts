@@ -20,15 +20,12 @@ export class ListUserByEventUseCase {
 
     const event: Event = await this.eventRepository.findById(eventId);
     if (!event) throw new AppError('Event not found', 404);
-    console.log(event);
 
     const eventBelongsToUser =
       await this.eventRepository.checksIfTheEventBelongsToUser(event, user);
-
-    console.log(eventBelongsToUser);
+    if (!eventBelongsToUser) throw new AppError('Unauthorized', 401);
 
     const users = await this.userRepository.findByEvent(event);
-    console.log(users);
     return users;
   }
 }

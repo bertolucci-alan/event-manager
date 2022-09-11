@@ -6,12 +6,15 @@ export const dataSource: DataSource = new DataSource({
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: '',
+  password: 'password',
   database: 'event_manager',
   entities: ['./src/database/entity/*.ts'],
   synchronize: true,
 });
 
 (async () => {
-  await dataSource.initialize();
+  await dataSource
+    .initialize()
+    .then(() => console.log('Data source initialized'))
+    .catch((err) => console.log(err));
 })();

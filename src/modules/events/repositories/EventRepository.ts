@@ -34,13 +34,9 @@ export class EventRepository implements IEventRepository {
     event: Event,
     user: User
   ): Promise<boolean> {
-    console.log(user.id);
     const eventUser = await this.repository.findOne({
-      relations: ['owner', 'users'],
+      where: { ownerId: user.id },
     });
-
-    console.log(eventUser);
-
     return eventUser ? true : false;
   }
 }

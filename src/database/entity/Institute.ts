@@ -28,8 +28,14 @@ export class Institute {
 
   //owner institutes relationship
   @ManyToOne(() => User, (User) => User.events)
-  @JoinColumn()
+  @JoinColumn({
+    name: 'ownerId',
+    referencedColumnName: 'id',
+  })
   owner: User;
+
+  @Column()
+  ownerId: number;
 
   @CreateDateColumn()
   created_at: Date;

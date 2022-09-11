@@ -39,13 +39,19 @@ export class Event {
 
   //institute relationship
   @ManyToOne(() => Institute, (Institute) => Institute.events)
-  @JoinColumn()
+  @JoinColumn({ name: 'instituteId', referencedColumnName: 'id' })
   institute: Institute;
 
   //owner relationship
   @ManyToOne(() => User, (User) => User.events)
-  @JoinColumn()
+  @JoinColumn({
+    name: 'ownerId',
+    referencedColumnName: 'id',
+  })
   owner: User;
+
+  @Column()
+  ownerId: number;
 
   //users_events relationship
   @ManyToMany(() => User, (users) => users.users_events)

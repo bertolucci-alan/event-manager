@@ -15,7 +15,7 @@ export class InstituteRepository implements IInstituteRepository {
 
   async findByUser(user: User): Promise<Institute | null> {
     const institute = await this.repository.findOne({
-      where: { owner: user as FindOptionsWhere<User> },
+      where: { ownerId: user.id },
     });
     return institute;
   }

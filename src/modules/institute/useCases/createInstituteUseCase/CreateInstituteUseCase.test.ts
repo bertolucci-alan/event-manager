@@ -1,7 +1,5 @@
-import { dataSource } from '@src/database';
 import { Institute, User } from '@src/database/entity';
 import { UserRepository } from '@src/modules/users/repositories/UserRepository';
-import { CreateUserUseCase } from '@src/modules/users/useCases/createUserUseCase/CreateUserUseCase';
 import { mock } from 'jest-mock-extended';
 import { InstituteRepository } from '../../repositories/InstituteRepository';
 import { CreateInstituteUseCase } from './CreateInstituteUseCase';
@@ -11,8 +9,8 @@ const userRepositoryMock = mock<UserRepository>();
 const date = new Date();
 
 describe('Create Institute useCase unit test', () => {
-  it.only('should return successfully when create a new institute', async () => {
-    const newUser: User = {
+  it('should return successfully when create a new institute', async () => {
+    const user: User = {
       id: 55,
       name: 'Alan',
       email: 'alan@gmail.com',
@@ -25,17 +23,6 @@ describe('Create Institute useCase unit test', () => {
       users_events: [],
       institutes: [],
     };
-
-    userRepositoryMock.create.mockResolvedValue(newUser);
-
-    const createUser = new CreateUserUseCase(userRepositoryMock);
-
-    const user = await createUser.execute({
-      name: newUser.name,
-      email: newUser.email,
-      password: newUser.password,
-      balance: newUser.balance,
-    });
 
     const newInstitute: Institute = {
       id: 30,
@@ -63,5 +50,18 @@ describe('Create Institute useCase unit test', () => {
     );
 
     expect(institute).toEqual(newInstitute);
+  });
+
+  it('should return 404 when the user not found', async () => {
+    const createInstitute = new CreateInstituteUseCase(
+      userRepositoryMock,
+      instituteRepositoryMock
+    );
+    await expect(
+      createInstitute.execute({ name: 'fake-name', CNPJ: 'fake-cnpj' }, 0)
+    ).rejects.toEqual({
+      message: 'User not found',
+      statusCode: 404,
+    });
   });
 });

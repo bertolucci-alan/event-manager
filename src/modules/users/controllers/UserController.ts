@@ -30,7 +30,7 @@ export class UserController {
 
   @Authorized()
   @Get('/:eventId')
-  async getUserByEvent(
+  async getUsersByEvent(
     @Param('eventId') eventId: number,
     @CurrentUser() { id }: Session
   ): Promise<User[]> {

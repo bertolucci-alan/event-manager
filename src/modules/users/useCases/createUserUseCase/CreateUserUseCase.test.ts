@@ -20,6 +20,7 @@ describe('Create User UseCase unit test', () => {
       updated_at: date,
       events: [],
       users_events: [],
+      institutes: [],
     };
 
     userRepositoryMock.create.mockResolvedValue(newUser);

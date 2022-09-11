@@ -29,6 +29,16 @@ export class CreateEventUseCase {
       userExists,
       instituteByUser
     );
-    return event;
+
+    const eventWithUsers = await this.eventRepository.findById(event.id, {
+      relations: ['users'],
+    });
+
+    const eventAttend = await this.eventRepository.update(event.id, {
+      ...eventWithUsers,
+      users: [...eventWithUsers.users, userExists],
+    });
+
+    return eventAttend;
   }
 }

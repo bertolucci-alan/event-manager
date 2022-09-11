@@ -23,6 +23,7 @@ describe('Create Institute useCase unit test', () => {
       updated_at: date,
       events: [],
       users_events: [],
+      institutes: [],
     };
 
     userRepositoryMock.create.mockResolvedValue(newUser);
@@ -43,6 +44,8 @@ describe('Create Institute useCase unit test', () => {
       owner: user,
       created_at: date,
       updated_at: date,
+      events: [],
+      ownerId: 0,
     };
 
     instituteRepositoryMock.create.mockResolvedValue(newInstitute);

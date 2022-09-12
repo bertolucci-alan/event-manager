@@ -10,7 +10,6 @@ const date = new Date();
 
 describe('Create Institute useCase unit test', () => {
   beforeEach(() => {
-    userRepositoryMock.findById.mockReset();
     instituteRepositoryMock.create.mockReset();
   });
   it('should return successfully when create a new institute', async () => {
@@ -57,7 +56,7 @@ describe('Create Institute useCase unit test', () => {
   });
 
   it('should return 404 when the user not found', async () => {
-    // userRepositoryMock.findById.mockResolvedValue(null);
+    userRepositoryMock.findById.mockResolvedValue(null);
 
     const createInstitute = new CreateInstituteUseCase(
       userRepositoryMock,

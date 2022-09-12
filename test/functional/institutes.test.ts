@@ -1,17 +1,12 @@
-import { Institute, User } from '@src/database/entity';
+import { CreateInstituteDTO } from '@src/modules/institute/dtos/CreateInstituteDTO';
 import { InstituteRepository } from '@src/modules/institute/repositories/InstituteRepository';
 import { CreateUserDTO } from '@src/modules/users/dtos/CreateUserDTO';
 import { JWTProvider } from '@src/modules/users/providers/JWTProvider/JWTProvider';
 import { UserRepository } from '@src/modules/users/repositories/UserRepository';
-import { mock } from 'jest-mock-extended';
-
-const instituteRepositoryMock = mock<InstituteRepository>();
-const userRepositoryMock = mock<UserRepository>();
 
 const userRepository = new UserRepository();
 const instituteRepository = new InstituteRepository();
 const jwtProvider = new JWTProvider();
-const date = new Date();
 
 describe('Institute functional tests', () => {
   const defaultUser: CreateUserDTO = {
@@ -29,18 +24,10 @@ describe('Institute functional tests', () => {
   });
   describe('When craete a new institute', () => {
     it('should return successfully when create a new institute', async () => {
-      const newInstitute: Institute = {
+      const newInstitute: CreateInstituteDTO = {
         name: 'Escola de Samba',
         CNPJ: 'XX. XXX. XXX/0001-XX',
-        id: 10,
-        owner: new User(),
-        created_at: date,
-        updated_at: date,
-        events: [],
-        ownerId: 1,
       };
-
-      instituteRepositoryMock.create.mockResolvedValue(newInstitute);
 
       const response = await global.testRequest
         .post('/api/institutes')
@@ -48,7 +35,7 @@ describe('Institute functional tests', () => {
         .set({
           authorization: `Bearer ${token}`,
         });
-      // expect(response.status).toEqual(200);
+      expect(response.status).toEqual(200);
       expect(response.body).toEqual(expect.objectContaining(newInstitute));
     });
   });

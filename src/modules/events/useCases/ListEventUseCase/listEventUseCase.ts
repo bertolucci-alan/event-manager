@@ -1,16 +1,17 @@
 import { Event } from '@src/database/entity';
 import { inject, injectable } from 'tsyringe';
 import { IEventRepository } from '../../repositories/interfaces/IEventRepository';
-import CacheService from '@src/util/cache';
 import config from 'config';
+import { ICacheService } from '@src/util/cache/interfaces/ICacheService';
 @injectable()
 export class ListEventUseCase {
   constructor(
+    @inject('CacheService') private cacheService: ICacheService,
     @inject('EventRepository') private eventRepository: IEventRepository
   ) {}
 
   async execute(psd: boolean): Promise<Event[]> {
-    const cachedEvents = await CacheService.getCache<Event[]>(
+    const cachedEvents = await this.cacheService.getCache<Event[]>(
       config.get('App.cache.keys.getEvents')
     );
     if (cachedEvents) {
@@ -25,7 +26,10 @@ export class ListEventUseCase {
       relations: ['owner', 'institute'],
     });
 
-    await CacheService.setCache(config.get('App.cache.keys.getEvents'), events);
+    await this.cacheService.setCache(
+      config.get('App.cache.keys.getEvents'),
+      events
+    );
 
     return events;
   }

@@ -2,7 +2,7 @@ import { Event } from '@src/database/entity';
 import { IInstituteRepository } from '@src/modules/institute/repositories/interfaces/IInstituteRepository';
 import { IUserRepository } from '@src/modules/users/repositories/interfaces/IUserRepository';
 import { AppError } from '@src/shared/errors/app-error';
-import CacheService from '@src/util/cache';
+import { ICacheService } from '@src/util/cache/interfaces/ICacheService';
 import config from 'config';
 import { inject, injectable } from 'tsyringe';
 import { CreateEventDTO } from '../../dtos/CreateEventDTO';
@@ -11,6 +11,7 @@ import { IEventRepository } from '../../repositories/interfaces/IEventRepository
 @injectable()
 export class CreateEventUseCase {
   constructor(
+    @inject('CacheService') private cacheService: ICacheService,
     @inject('InstituteRepository')
     private instituteRepository: IInstituteRepository,
     @inject('EventRepository') private eventRepository: IEventRepository,
@@ -41,7 +42,7 @@ export class CreateEventUseCase {
       users: [...eventWithUsers.users, userExists],
     });
 
-    const cachedEvents = await CacheService.getCache<Event[]>(
+    const cachedEvents = await this.cacheService.getCache<Event[]>(
       config.get('App.cache.keys.getEvents')
     );
     if (cachedEvents) {
@@ -50,7 +51,7 @@ export class CreateEventUseCase {
         start_date: new Date(event.start_date),
         end_date: new Date(event.end_date),
       });
-      await CacheService.setCache<Event[]>(
+      await this.cacheService.setCache<Event[]>(
         config.get('App.cache.keys.getEvents'),
         cachedEvents
       );

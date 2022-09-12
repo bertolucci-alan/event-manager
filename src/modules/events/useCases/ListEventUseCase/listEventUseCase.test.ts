@@ -1,9 +1,11 @@
 import { Institute, User } from '@src/database/entity';
+import { CacheService } from '@src/util/cache/CacheService';
 import { mock } from 'jest-mock-extended';
 import { EventRepository } from '../../repositories/EventRepository';
-import { ListEventUseCase } from './listEventUseCase';
+import { ListEventUseCase } from './ListEventUseCase';
 
 const eventRepositoryMock = mock<EventRepository>();
+const cachedServiceMock = mock<CacheService>();
 const date = new Date();
 
 describe('ListEventUseCase unit test', () => {
@@ -41,9 +43,14 @@ describe('ListEventUseCase unit test', () => {
         users: [new User()],
       },
     ];
+    cachedServiceMock.getCache.mockResolvedValue(null);
+    cachedServiceMock.setCache.mockResolvedValue(null);
 
     eventRepositoryMock.list.mockResolvedValue(newEvents);
-    const listEvents = new ListEventUseCase(eventRepositoryMock);
+    const listEvents = new ListEventUseCase(
+      cachedServiceMock,
+      eventRepositoryMock
+    );
     const response = await listEvents.execute(false);
     expect(response).toEqual(newEvents);
   });
@@ -84,7 +91,13 @@ describe('ListEventUseCase unit test', () => {
     ];
 
     eventRepositoryMock.list.mockResolvedValue(newEvents);
-    const listEvents = new ListEventUseCase(eventRepositoryMock);
+    cachedServiceMock.getCache.mockResolvedValue(null);
+    cachedServiceMock.setCache.mockResolvedValue(null);
+
+    const listEvents = new ListEventUseCase(
+      cachedServiceMock,
+      eventRepositoryMock
+    );
     const response = await listEvents.execute(false);
     expect(response).toEqual(newEvents);
   });

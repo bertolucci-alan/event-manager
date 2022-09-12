@@ -14,7 +14,7 @@ import { container } from 'tsyringe';
 import { CreateEventDTO } from '../dtos/CreateEventDTO';
 import { AttendEventUseCase } from '../useCases/attendEventUseCase/AttendEventUseCase';
 import { CreateEventUseCase } from '../useCases/createEventUseCase/CreateEventUseCase';
-import { ListEventUseCase } from '../useCases/ListEventUseCase/listEventUseCase';
+import { ListEventUseCase } from '../useCases/ListEventUseCase/ListEventUseCase';
 
 @JsonController('/events')
 export class EventController {

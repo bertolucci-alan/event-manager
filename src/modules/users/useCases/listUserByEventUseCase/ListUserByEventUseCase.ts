@@ -2,8 +2,6 @@ import { Event, User } from '@src/database/entity';
 import { IEventRepository } from '@src/modules/events/repositories/interfaces/IEventRepository';
 import { IInstituteRepository } from '@src/modules/institute/repositories/interfaces/IInstituteRepository';
 import { AppError } from '@src/shared/errors/app-error';
-import CacheService from '@src/util/cache';
-import config from 'config';
 import { inject, injectable } from 'tsyringe';
 import { IUserRepository } from '../../repositories/interfaces/IUserRepository';
 
@@ -28,11 +26,6 @@ export class ListUserByEventUseCase {
     if (!eventBelongsToUser) throw new AppError('Unauthorized', 401);
 
     const users = await this.userRepository.findByEvent(event);
-
-    await CacheService.setCache<User[]>(
-      config.get('App.cache.keys.getUsers'),
-      users
-    );
 
     return users;
   }

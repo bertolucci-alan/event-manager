@@ -1,6 +1,7 @@
 import { Event, Institute, User } from '@src/database/entity';
 import { InstituteRepository } from '@src/modules/institute/repositories/InstituteRepository';
 import { UserRepository } from '@src/modules/users/repositories/UserRepository';
+import { CacheService } from '@src/util/cache/CacheService';
 import { mock } from 'jest-mock-extended';
 import { EventRepository } from '../../repositories/EventRepository';
 import { CreateEventUseCase } from './CreateEventUseCase';
@@ -8,8 +9,10 @@ import { CreateEventUseCase } from './CreateEventUseCase';
 const userRepository = mock<UserRepository>();
 const instituteRepository = mock<InstituteRepository>();
 const eventRepository = mock<EventRepository>();
+const cachedServiceMock = mock<CacheService>();
 const date = new Date();
 
+jest.setTimeout(15000);
 describe('CreateEventUseCase unit test', () => {
   it('should be able to create an event', async () => {
     const user: User = {
@@ -59,7 +62,11 @@ describe('CreateEventUseCase unit test', () => {
     eventRepository.findById.mockResolvedValue(newEvent);
     eventRepository.update.mockResolvedValue(newEvent);
 
+    cachedServiceMock.getCache.mockResolvedValue(null);
+    cachedServiceMock.setCache.mockResolvedValue(null);
+
     const createEvent = new CreateEventUseCase(
+      cachedServiceMock,
       instituteRepository,
       eventRepository,
       userRepository
@@ -98,7 +105,11 @@ describe('CreateEventUseCase unit test', () => {
     userRepository.findById.mockResolvedValue(user);
     instituteRepository.findByUser.mockResolvedValue(null);
 
+    cachedServiceMock.getCache.mockResolvedValue(null);
+    cachedServiceMock.setCache.mockResolvedValue(null);
+
     const createEvent = new CreateEventUseCase(
+      cachedServiceMock,
       instituteRepository,
       eventRepository,
       userRepository

@@ -8,10 +8,10 @@ import { ListUserByEventUseCase } from './ListUserByEventUseCase';
 const userRepositoryMock = mock<UserRepository>();
 const instituteRepositoryMock = mock<InstituteRepository>();
 const eventRepository = mock<EventRepository>();
-const date = new Date();
 
 describe('List User By Event unit test', () => {
   it('should return a list of users who will participate in the event', async () => {
+    const date = new Date();
     const user: User = {
       id: 1,
       name: 'Alan',
@@ -44,7 +44,6 @@ describe('List User By Event unit test', () => {
     };
     eventRepository.findById.mockResolvedValue(event);
     eventRepository.checksIfTheEventBelongsToUser.mockResolvedValue(true);
-
     userRepositoryMock.findByEvent.mockResolvedValue([user]);
 
     const listEvent = new ListUserByEventUseCase(
@@ -58,6 +57,7 @@ describe('List User By Event unit test', () => {
   });
 
   it('should return unauthorized when user is not event owner', async () => {
+    const date = new Date();
     const user: User = {
       id: 1,
       name: 'Alan',

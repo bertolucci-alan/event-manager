@@ -31,7 +31,6 @@ export class CreateEventUseCase {
       userExists,
       instituteByUser
     );
-
     const eventWithUsers = await this.eventRepository.findById(event.id, {
       relations: ['users'],
     });
@@ -46,8 +45,12 @@ export class CreateEventUseCase {
       config.get('App.cache.keys.getEvents')
     );
     if (cachedEvents) {
-      cachedEvents?.push(event);
-      await CacheService.setCache(
+      cachedEvents?.push({
+        ...event,
+        start_date: new Date(event.start_date),
+        end_date: new Date(event.end_date),
+      });
+      await CacheService.setCache<Event[]>(
         config.get('App.cache.keys.getEvents'),
         cachedEvents
       );

@@ -13,7 +13,13 @@ export class ListEventUseCase {
     const cachedEvents = await CacheService.getCache<Event[]>(
       config.get('App.cache.keys.getEvents')
     );
-    if (cachedEvents) return cachedEvents;
+    if (cachedEvents) {
+      if (!psd)
+        return cachedEvents.filter(
+          (cacheEvent) => new Date(cacheEvent.end_date) > new Date()
+        );
+      return cachedEvents;
+    }
 
     const events: Event[] = await this.eventRepository.list(psd, {
       relations: ['owner', 'institute'],

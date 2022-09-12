@@ -29,7 +29,5 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Run all tests
-        timeout-minutes: 1
-        run: yarn test && ./ghaction_script.sh
-        shell: 'script -q -e -c "bash --noprofile --norc -eo pipefail {0}"'
+      - name: Run unit tests
+        run: yarn test:unit

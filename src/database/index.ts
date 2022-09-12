@@ -7,7 +7,6 @@ import {
   DB_PASSWORD,
   DB_DATABASE,
 } from '@src/config/env';
-console.log(NODE_ENV, DB_HOST);
 
 export const dataSource: DataSource = new DataSource({
   name: NODE_ENV,

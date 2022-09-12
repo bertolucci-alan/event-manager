@@ -25,9 +25,12 @@ export class EventRepository implements IEventRepository {
     return event;
   }
 
-  async findById(id: number, options?: FindOneOptions<Event>): Promise<Event> {
+  async findById(
+    id: number,
+    options?: FindOneOptions<Event>
+  ): Promise<Event | null> {
     const event = await this.repository.findOne({ where: { id }, ...options });
-    return event as Event;
+    return event;
   }
 
   async checksIfTheEventBelongsToUser(

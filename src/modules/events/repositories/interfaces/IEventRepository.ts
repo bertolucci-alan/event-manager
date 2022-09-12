@@ -9,6 +9,6 @@ export interface IEventRepository {
     institute: Institute
   ): Promise<Event>;
   update(id: number, data: DeepPartial<Event>): Promise<Event>;
-  findById(id: number, options?: FindOneOptions<Event>): Promise<Event>;
+  findById(id: number, options?: FindOneOptions<Event>): Promise<Event | null>;
   checksIfTheEventBelongsToUser(event: Event, user: User): Promise<boolean>;
 }

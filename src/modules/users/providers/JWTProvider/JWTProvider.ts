@@ -1,6 +1,6 @@
-import { User } from '@src/database/entity';
 import { IJWTProvider } from './interfaces/IJWTProvider';
 import jwt from 'jsonwebtoken';
+import { Token } from '@src/shared/interfaces/Token';
 
 export class JWTProvider implements IJWTProvider {
   generateToken(payload: object): string {
@@ -9,7 +9,7 @@ export class JWTProvider implements IJWTProvider {
     });
   }
 
-  decodedToken(token: string): User {
-    return jwt.verify(token, 'secret') as User;
+  decodedToken(token: string): Token {
+    return jwt.decode(token) as any as Token;
   }
 }

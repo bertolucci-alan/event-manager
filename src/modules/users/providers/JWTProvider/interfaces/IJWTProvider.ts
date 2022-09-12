@@ -1,6 +1,6 @@
-import { User } from '@src/database/entity';
+import { Token } from '@src/shared/interfaces/Token';
 
 export interface IJWTProvider {
   generateToken(payload: object): string;
-  decodedToken(token: string): User;
+  decodedToken(token: string): Token;
 }

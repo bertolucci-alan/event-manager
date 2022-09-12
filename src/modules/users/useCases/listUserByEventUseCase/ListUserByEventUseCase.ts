@@ -17,11 +17,6 @@ export class ListUserByEventUseCase {
   ) {}
 
   async execute(authId: number, eventId: number): Promise<User[]> {
-    // const cachedUsers = await CacheService.getCache<User[]>(
-    //   config.get('App.cache.keys.getUsers')
-    // );
-    // if (cachedUsers) return cachedUsers;
-
     const user: User | null = await this.userRepository.findById(authId);
     if (!user) throw new AppError('User not found', 404);
 

@@ -8,7 +8,7 @@ import {
   JsonController,
   Param,
   Post,
-  QueryParams,
+  QueryParam,
 } from 'routing-controllers';
 import { container } from 'tsyringe';
 import { CreateEventDTO } from '../dtos/CreateEventDTO';
@@ -40,7 +40,7 @@ export class EventController {
 
   @Authorized()
   @Get('/')
-  async get(@QueryParams() psd: boolean): Promise<Event[]> {
+  async get(@QueryParam('psd') psd: boolean): Promise<Event[]> {
     const listEvents = container.resolve(ListEventUseCase);
     return await listEvents.execute(psd);
   }

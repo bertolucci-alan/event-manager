@@ -1,21 +1,24 @@
-import redis from 'redis';
+import IORedis from 'ioredis';
 import { promisify } from 'util';
-class RedisCacheService {
-  constructor(private client = redis.createClient()) {}
 
-  setCache(key: string, value: string) {
-    const syncRedisSet = promisify(this.client.set).bind(this.client);
-    return syncRedisSet(key, value);
-  }
+export class CacheService {
+  constructor(private client: IORedis = new IORedis({ host: 'redis' })) {}
 
-  getCache<T>(key: string): T {
+  async getCache<T>(key: string): Promise<T | null> {
     const syncRedisGet = promisify(this.client.get).bind(this.client);
-    return syncRedisGet(key);
+    const cachedValue = await syncRedisGet(key);
+    if (!cachedValue) return cachedValue as null;
+    return JSON.parse(cachedValue) as T;
   }
 
-  deleteCache(key: string) {
-    const syncRedisDelete = promisify(this.client.del).bind(this.client);
-    return syncRedisDelete(key);
+  async setCache<T>(key: string, value: T) {
+    const syncRedisSet = promisify(this.client.set).bind(this.client);
+    return await syncRedisSet(key, JSON.stringify(value));
+  }
+
+  async deleteCache(key: string) {
+    return this.client.del(key);
   }
 }
-export default new RedisCacheService();
+
+export default new CacheService();

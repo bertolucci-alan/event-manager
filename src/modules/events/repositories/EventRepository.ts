@@ -4,7 +4,6 @@ import {
   DeepPartial,
   FindManyOptions,
   FindOneOptions,
-  FindOptionsWhere,
   MoreThanOrEqual,
 } from 'typeorm';
 import { CreateEventDTO } from '../dtos/CreateEventDTO';
@@ -37,9 +36,7 @@ export class EventRepository implements IEventRepository {
         ...options,
         where: { end_date: MoreThanOrEqual(new Date()) },
       });
-    return await this.repository.find({
-      ...options,
-    });
+    return await this.repository.find({ ...options });
   }
 
   async findById(

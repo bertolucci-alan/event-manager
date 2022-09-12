@@ -50,7 +50,7 @@ describe('AttendEventUseCase unit test', () => {
     expect(response).toEqual(event);
   });
 
-  it.skip('should return 404 when event not found', async () => {
+  it('should return 404 when event not found', async () => {
     const user: User = {
       id: 55,
       name: 'Alan',
@@ -65,6 +65,7 @@ describe('AttendEventUseCase unit test', () => {
       institutes: [],
     };
     userRepository.findById.mockResolvedValue(user);
+    eventRepository.findById.mockResolvedValue(null);
 
     const attendEvent = new AttendEventUseCase(eventRepository, userRepository);
 

@@ -4,6 +4,7 @@ import { UserRepository } from '@src/modules/users/repositories/UserRepository';
 import { InstituteRepository } from '@src/modules/institute/repositories/InstituteRepository';
 import { CreateUserDTO } from '@src/modules/users/dtos/CreateUserDTO';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const repositoryMock = mock<Repository<any>>();
 const instituteRepository = new InstituteRepository();
 const userRepository = new UserRepository();

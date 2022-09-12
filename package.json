@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=develop ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/src/index.js",
-    "test": "yarn lint && yarn test:unit && yarn test:functional",
+    "test": "yarn lint && yarn lint:fix && yarn test:unit && yarn test:functional",
     "test:functional": "cross-env NODE_ENV=test DB_DATABASE=event_manager_test jest --projects ./test --runInBand",
     "test:unit": "jest",
     "lint": "eslint ./src ./test --ext .ts",

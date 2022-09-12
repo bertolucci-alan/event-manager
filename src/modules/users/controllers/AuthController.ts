@@ -1,4 +1,3 @@
-import { AppError } from '@src/shared/errors/app-error';
 import { Body, JsonController, Post } from 'routing-controllers';
 import { container } from 'tsyringe';
 import { AuthenticateUserDTO } from '../dtos/AuthenticateUserDTO';

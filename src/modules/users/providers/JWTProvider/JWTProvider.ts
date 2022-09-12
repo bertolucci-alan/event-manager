@@ -10,6 +10,6 @@ export class JWTProvider implements IJWTProvider {
   }
 
   decodedToken(token: string): Token {
-    return jwt.decode(token) as any as Token;
+    return jwt.decode(token) as unknown as Token;
   }
 }

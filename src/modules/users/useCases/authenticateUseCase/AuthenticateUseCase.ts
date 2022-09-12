@@ -1,6 +1,5 @@
 import { User } from '@src/database/entity';
 import { AppError } from '@src/shared/errors/app-error';
-import { sign } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 import { AuthenticateUserDTO } from '../../dtos/AuthenticateUserDTO';
 import { IHashProvider } from '../../providers/HashProvider/interfaces/IHashProvider';

@@ -1,6 +1,5 @@
 import { dataSource } from '@src/database';
 import { Institute, User } from '@src/database/entity';
-import { FindOneOptions, FindOptionsWhere } from 'typeorm';
 import { IInstituteRepository } from './interfaces/IInstituteRepository';
 
 export class InstituteRepository implements IInstituteRepository {

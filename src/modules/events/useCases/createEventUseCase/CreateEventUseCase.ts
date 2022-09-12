@@ -34,6 +34,8 @@ export class CreateEventUseCase {
       relations: ['users'],
     });
 
+    if (!eventWithUsers) throw new AppError('Users not found', 404);
+
     const eventAttend = await this.eventRepository.update(event.id, {
       ...eventWithUsers,
       users: [...eventWithUsers.users, userExists],

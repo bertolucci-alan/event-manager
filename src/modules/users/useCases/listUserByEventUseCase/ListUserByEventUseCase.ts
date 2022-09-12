@@ -15,10 +15,10 @@ export class ListUserByEventUseCase {
   ) {}
 
   async execute(authId: number, eventId: number): Promise<User[]> {
-    const user: User = await this.userRepository.findById(authId);
+    const user: User | null = await this.userRepository.findById(authId);
     if (!user) throw new AppError('User not found', 404);
 
-    const event: Event = await this.eventRepository.findById(eventId);
+    const event: Event | null = await this.eventRepository.findById(eventId);
     if (!event) throw new AppError('Event not found', 404);
 
     const eventBelongsToUser =

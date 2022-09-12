@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 export const dataSource: DataSource = new DataSource({
   name: 'default',
   type: 'postgres',
-  host: 'localhost',
+  host: 'db',
   port: 5432,
   username: 'postgres',
   password: 'password',
@@ -12,9 +12,4 @@ export const dataSource: DataSource = new DataSource({
   synchronize: true,
 });
 
-(async () => {
-  await dataSource
-    .initialize()
-    .then(() => console.log('Data source initialized'))
-    .catch((err) => console.log(err));
-})();
+dataSource.initialize().then(() => console.log('Data source initialized'));

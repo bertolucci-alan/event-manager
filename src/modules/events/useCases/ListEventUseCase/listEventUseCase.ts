@@ -15,7 +15,9 @@ export class ListEventUseCase {
     );
     if (cachedEvents) return cachedEvents;
 
-    const events: Event[] = await this.eventRepository.list(psd);
+    const events: Event[] = await this.eventRepository.list(psd, {
+      relations: ['owner', 'institute'],
+    });
 
     await CacheService.setCache(config.get('App.cache.keys.getEvents'), events);
 

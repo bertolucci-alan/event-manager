@@ -2,6 +2,8 @@ import { Event } from '@src/database/entity';
 import { IInstituteRepository } from '@src/modules/institute/repositories/interfaces/IInstituteRepository';
 import { IUserRepository } from '@src/modules/users/repositories/interfaces/IUserRepository';
 import { AppError } from '@src/shared/errors/app-error';
+import CacheService from '@src/util/cache';
+import config from 'config';
 import { inject, injectable } from 'tsyringe';
 import { CreateEventDTO } from '../../dtos/CreateEventDTO';
 import { IEventRepository } from '../../repositories/interfaces/IEventRepository';
@@ -33,13 +35,23 @@ export class CreateEventUseCase {
     const eventWithUsers = await this.eventRepository.findById(event.id, {
       relations: ['users'],
     });
-
     if (!eventWithUsers) throw new AppError('Users not found', 404);
 
     const eventAttend = await this.eventRepository.update(event.id, {
       ...eventWithUsers,
       users: [...eventWithUsers.users, userExists],
     });
+
+    const cachedEvents = await CacheService.getCache<Event[]>(
+      config.get('App.cache.keys.getEvents')
+    );
+    if (cachedEvents) {
+      cachedEvents?.push(event);
+      await CacheService.setCache(
+        config.get('App.cache.keys.getEvents'),
+        cachedEvents
+      );
+    }
 
     return eventAttend;
   }

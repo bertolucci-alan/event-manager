@@ -4,14 +4,17 @@ import {
   Authorized,
   Body,
   CurrentUser,
+  Get,
   JsonController,
   Param,
   Post,
+  QueryParams,
 } from 'routing-controllers';
 import { container } from 'tsyringe';
 import { CreateEventDTO } from '../dtos/CreateEventDTO';
 import { AttendEventUseCase } from '../useCases/attendEventUseCase/AttendEventUseCase';
 import { CreateEventUseCase } from '../useCases/createEventUseCase/CreateEventUseCase';
+import { ListEventUseCase } from '../useCases/ListEventUseCase/listEventUseCase';
 
 @JsonController('/events')
 export class EventController {
@@ -33,5 +36,12 @@ export class EventController {
   ): Promise<Event> {
     const attendEvent = container.resolve(AttendEventUseCase);
     return await attendEvent.execute(eventId, id);
+  }
+
+  @Authorized()
+  @Get('/')
+  async get(@QueryParams() psd: boolean): Promise<Event[]> {
+    const listEvents = container.resolve(ListEventUseCase);
+    return await listEvents.execute(psd);
   }
 }

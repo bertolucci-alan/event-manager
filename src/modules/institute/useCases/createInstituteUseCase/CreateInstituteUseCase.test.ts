@@ -10,8 +10,8 @@ const date = new Date();
 
 describe('Create Institute useCase unit test', () => {
   beforeEach(() => {
-    userRepositoryMock.findById.mockClear();
-    instituteRepositoryMock.create.mockClear();
+    userRepositoryMock.findById.mockReset();
+    instituteRepositoryMock.create.mockReset();
   });
   it('should return successfully when create a new institute', async () => {
     const user: User = {
@@ -56,7 +56,7 @@ describe('Create Institute useCase unit test', () => {
     expect(institute).toEqual(newInstitute);
   });
 
-  it.skip('should return 404 when the user not found', async () => {
+  it('should return 404 when the user not found', async () => {
     // userRepositoryMock.findById.mockResolvedValue(null);
 
     const createInstitute = new CreateInstituteUseCase(

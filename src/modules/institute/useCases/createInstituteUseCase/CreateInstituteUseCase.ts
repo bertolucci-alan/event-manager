@@ -13,7 +13,7 @@ export class CreateInstituteUseCase {
   ) {}
 
   async execute(data: CreateInstituteDTO, authId: number) {
-    const user = await this.userRepository.findById(123);
+    const user = await this.userRepository.findById(authId);
     console.log(user);
     if (!user) throw new AppError('User not found', 404);
 

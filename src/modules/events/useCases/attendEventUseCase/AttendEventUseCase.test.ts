@@ -2,7 +2,7 @@ import { Event, Institute, User } from '@src/database/entity';
 import { UserRepository } from '@src/modules/users/repositories/UserRepository';
 import { mock } from 'jest-mock-extended';
 import { EventRepository } from '../../repositories/EventRepository';
-import { AttendEventUseCase } from '@src/modules/events/useCases/attendEventUseCase/AttendEventUseCase';
+import { AttendEventUseCase } from './AttendEventUseCase';
 
 const userRepository = mock<UserRepository>();
 const eventRepository = mock<EventRepository>();

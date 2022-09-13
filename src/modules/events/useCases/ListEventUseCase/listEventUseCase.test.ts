@@ -2,7 +2,7 @@ import { Institute, User } from '@src/database/entity';
 import { CacheService } from '@src/util/cache/CacheService';
 import { mock } from 'jest-mock-extended';
 import { EventRepository } from '../../repositories/EventRepository';
-import { ListEventUseCase } from '@src/modules/events/useCases/ListEventUseCase/ListEventUseCase';
+import { ListEventUseCase } from './ListEventUseCase';
 
 const eventRepositoryMock = mock<EventRepository>();
 const cachedServiceMock = mock<CacheService>();

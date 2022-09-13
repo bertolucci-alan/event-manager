@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/src/index.js",
     "test": "yarn lint && yarn lint:fix && yarn test:unit && yarn test:functional",
-    "test:functional": "cross-env NODE_ENV=test DB_DATABASE=event_manager_test jest --projects ./test --runInBand",
+    "test:functional": "cross-env NODE_ENV=test DB_HOST=127.0.0.1 DB_DATABASE=event_manager_test jest --projects ./test --runInBand",
     "test:unit": "jest",
     "lint": "eslint ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",

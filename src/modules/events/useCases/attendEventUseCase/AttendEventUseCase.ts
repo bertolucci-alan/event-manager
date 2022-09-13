@@ -23,14 +23,14 @@ export class AttendEventUseCase {
     if (userExists.balance < eventExists.price)
       throw new AppError('Insufficient balance');
 
-    const event = await this.eventRepository.update(eventId, {
-      ...eventExists,
-      users: [...eventExists.users, userExists],
-    });
-
     await this.userRepository.update(authId, {
       ...userExists,
       balance: userExists.balance - eventExists.price,
+    });
+
+    const event = await this.eventRepository.update(eventId, {
+      ...eventExists,
+      users: [...eventExists.users, userExists],
     });
 
     return event;

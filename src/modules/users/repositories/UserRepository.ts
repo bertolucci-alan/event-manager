@@ -12,6 +12,11 @@ export class UserRepository implements IUserRepository {
     return await this.repository.save(user);
   }
 
+  async update(id: number, data: DeepPartial<User>): Promise<User> {
+    const user = await this.repository.save({ id, ...data });
+    return user;
+  }
+
   async find(): Promise<User[]> {
     const user = await this.repository.find();
     return user;

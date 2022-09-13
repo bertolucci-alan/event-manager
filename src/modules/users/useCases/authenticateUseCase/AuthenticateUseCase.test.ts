@@ -1,17 +1,20 @@
 import { User } from '@src/database/entity';
 import { mock } from 'jest-mock-extended';
 import { HashProvider } from '../../providers/HashProvider/HashProvider';
+import { JWTProvider } from '../../providers/JWTProvider/JWTProvider';
 import { UserRepository } from '../../repositories/UserRepository';
 import { AuthenticateUseCase } from './AuthenticateUseCase';
 
 const userRepositoryMock = mock<UserRepository>();
 const hashProviderMock = mock<HashProvider>();
+const jwtProviderMock = mock<JWTProvider>();
+const jwtProvider = new JWTProvider();
 const date = new Date();
 
 describe('Authenticate Case unit test', () => {
   it('should return successfully when user authenticate', async () => {
     const newUser: User = {
-      id: 1,
+      id: 55,
       name: 'Alan',
       email: 'alan@gmail.com',
       password: '123123123',
@@ -19,14 +22,21 @@ describe('Authenticate Case unit test', () => {
       isAdmin: false,
       created_at: date,
       updated_at: date,
+      events: [],
+      users_events: [],
+      institutes: [],
     };
+
+    const token = jwtProvider.generateToken({ id: newUser.id });
 
     userRepositoryMock.findByEmail.mockResolvedValue(newUser);
     hashProviderMock.comparePassword.mockResolvedValue(true);
+    jwtProviderMock.generateToken.mockResolvedValue(token as never);
 
     const authCase = new AuthenticateUseCase(
       userRepositoryMock,
-      hashProviderMock
+      hashProviderMock,
+      jwtProvider
     );
     const response = await authCase.execute({
       email: newUser.email,
@@ -46,7 +56,8 @@ describe('Authenticate Case unit test', () => {
 
     const authCase = new AuthenticateUseCase(
       userRepositoryMock,
-      hashProviderMock
+      hashProviderMock,
+      jwtProvider
     );
 
     await expect(
@@ -59,7 +70,7 @@ describe('Authenticate Case unit test', () => {
 
   it('should return false when password does not match', async () => {
     const user: User = {
-      id: 1,
+      id: 55,
       name: 'Alan',
       email: 'alan@gmail.com',
       password: '123123123',
@@ -67,6 +78,9 @@ describe('Authenticate Case unit test', () => {
       isAdmin: false,
       created_at: date,
       updated_at: date,
+      events: [],
+      users_events: [],
+      institutes: [],
     };
 
     userRepositoryMock.findByEmail.mockResolvedValue(user);
@@ -74,7 +88,8 @@ describe('Authenticate Case unit test', () => {
 
     const authCase = new AuthenticateUseCase(
       userRepositoryMock,
-      hashProviderMock
+      hashProviderMock,
+      jwtProvider
     );
 
     await expect(

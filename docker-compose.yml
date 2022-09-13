@@ -14,3 +14,20 @@ services:
     environment:
       NODE_ENV: dev
       PORT: 3000
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: 'postgres:alpine'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=event_manager
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+  redis:
+    image: redis
+    ports:
+      - 63780:63780

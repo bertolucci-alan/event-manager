@@ -1,7 +1,7 @@
 // import { dataSource } from '@src/database';
 import { dataSource } from '@src/database/index';
-import { User } from '@src/database/entity';
-import { DeepPartial, Repository } from 'typeorm';
+import { Event, User } from '@src/database/entity';
+import { DeepPartial } from 'typeorm';
 import { IUserRepository } from './interfaces/IUserRepository';
 
 export class UserRepository implements IUserRepository {
@@ -12,11 +12,36 @@ export class UserRepository implements IUserRepository {
     return await this.repository.save(user);
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async find(): Promise<User[]> {
+    const user = await this.repository.find();
+    return user;
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
     const user = await this.repository.findOne({
       where: { email },
-      select: ['name', 'email', 'password', 'balance', 'isAdmin'],
+      select: ['id', 'name', 'email', 'password', 'balance', 'isAdmin'],
     });
-    return user as User;
+    return user;
+  }
+
+  async findById(id: number): Promise<User | null> {
+    const user = await this.repository.findOne({
+      where: { id },
+    });
+    return user;
+  }
+
+  async findByEvent(event: Event): Promise<User[]> {
+    const users = await this.repository.find({
+      where: {
+        users_events: { id: event.id },
+      },
+    });
+    return users;
+  }
+
+  async deleteAll(): Promise<void> {
+    await this.repository.delete({});
   }
 }

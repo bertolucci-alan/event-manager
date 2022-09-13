@@ -1,19 +1,23 @@
 import { DataSource } from 'typeorm';
+import {
+  NODE_ENV,
+  DB_HOST,
+  DB_PORT,
+  DB_USERNAME,
+  DB_PASSWORD,
+  DB_DATABASE,
+} from '@src/config/env';
 
 export const dataSource: DataSource = new DataSource({
-  name: 'default',
-  type: 'mysql',
-  host: 'localhost',
-  port: 3306,
-  username: 'root',
-  password: '',
-  database: 'event_manager',
+  name: NODE_ENV,
+  type: 'postgres',
+  host: DB_HOST,
+  port: Number(DB_PORT),
+  username: DB_USERNAME,
+  password: DB_PASSWORD,
+  database: DB_DATABASE,
   entities: ['./src/database/entity/*.ts'],
   synchronize: true,
 });
 
-(async () => {
-  await dataSource
-    .initialize()
-    .then(() => console.log('Data source intialized'));
-})();
+dataSource.initialize().then(() => console.log('Data source initialized'));

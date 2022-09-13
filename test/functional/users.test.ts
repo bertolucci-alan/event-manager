@@ -1,36 +1,31 @@
-import { User } from '@src/database/entity';
 import { Repository } from 'typeorm';
 import { mock } from 'jest-mock-extended';
-import { dataSource } from '@src/database';
 import { UserRepository } from '@src/modules/users/repositories/UserRepository';
+import { InstituteRepository } from '@src/modules/institute/repositories/InstituteRepository';
 import { CreateUserDTO } from '@src/modules/users/dtos/CreateUserDTO';
-import { AuthenticateUserDTO } from '@src/modules/users/dtos/AuthenticateUserDTO';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const repositoryMock = mock<Repository<any>>();
+const instituteRepository = new InstituteRepository();
 const userRepository = new UserRepository();
 
 describe('User functional tests', () => {
   beforeEach(async () => {
-    const userRepository = dataSource.getRepository(User);
-    await userRepository.delete({});
+    await instituteRepository.deleteAll();
+    await userRepository.deleteAll();
   });
-
-  describe('When create a new user', () => {
+  describe('When craete a new user', () => {
     it('should return successfully when create a new user', async () => {
-      const newUser: Partial<User> = {
+      const newUser: CreateUserDTO = {
         name: 'Alan',
-        email: 'alan@gmail.com',
+        email: 'alan+5@gmail.com',
         password: '123123123',
         balance: 0,
-        isAdmin: false,
       };
-
-      repositoryMock.create.mockResolvedValue(newUser);
 
       const response = await global.testRequest
         .post('/api/users')
         .send(newUser);
-
       expect(response.status).toBe(200);
       expect(response.body).toEqual(
         expect.objectContaining({ ...newUser, password: expect.any(String) })
@@ -47,54 +42,40 @@ describe('User functional tests', () => {
         .send(newUser);
       expect(response.status).toBe(400);
     });
-
-    it('should return 500 when there is duplicated key', async () => {
-      const newUser: Partial<User> = {
-        name: 'Alan',
-        email: 'alan@gmail.com',
-        password: '123123123',
-        balance: 0,
-        isAdmin: false,
-      };
-
-      await new UserRepository().create(newUser);
-
-      const response = await global.testRequest
-        .post('/api/users')
-        .send(newUser);
-
-      expect(response.status).toBe(500);
-    });
   });
 
   describe('When authenticate user', () => {
-    it('should generate a token for a valida user', async () => {
-      const newUser: Partial<User> = {
-        name: 'Alan',
-        email: 'alan@gmail.com',
-        password: '123123123',
-        balance: 0,
-        isAdmin: false,
-      };
+    const defaultUser: CreateUserDTO = {
+      name: 'Alan',
+      email: 'alan@gmail.com',
+      password: '123123123',
+      balance: 0,
+    };
 
-      await userRepository.create(newUser);
+    beforeEach(async () => {
+      await userRepository.create(defaultUser);
+    });
 
+    it('should generate a token for valid user', async () => {
       const response = await global.testRequest
         .post('/api/auth')
-        .send({ email: newUser.email, password: newUser.password });
+        .send({ email: defaultUser.email, password: defaultUser.password });
       expect(response.body).toEqual(
         expect.objectContaining({ token: expect.any(String) })
       );
     });
 
-    it('shold return 401 when failed authentication', async () => {
-      const user: AuthenticateUserDTO = {
-        email: 'incorrect_email@gmail.com',
-        password: 'incorrect-password',
-      };
-      const response = await global.testRequest.post('/api/auth').send(user);
-
-      expect(response.statusCode).toBe(401);
+    it('should return 401 when failed authentication', async () => {
+      const response = await global.testRequest.post('/api/auth').send({
+        email: 'fake-email@gmail.com',
+        password: 'fake-password',
+      });
+      expect(response.status).toBe(401);
+      expect(JSON.parse(response.text)).toEqual({
+        name: 'Unauthorized',
+        status: 401,
+        message: 'email/password invalid',
+      });
     });
   });
 });

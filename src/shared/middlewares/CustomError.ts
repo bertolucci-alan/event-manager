@@ -12,8 +12,11 @@ import { Errors } from '../interfaces/Errors';
 
 @Middleware({ type: 'after' })
 export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   error(err: Errors, _: Request, res: Response, __: NextFunction): Response {
-    if (err?.errors?.every((error: any) => error instanceof ValidationError)) {
+    if (
+      err?.errors?.every((error: unknown) => error instanceof ValidationError)
+    ) {
       const parsedError = err?.errors?.map((error: ValidationError) => {
         return this.parseValidationError(error);
       });

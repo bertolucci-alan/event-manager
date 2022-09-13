@@ -1,24 +1,22 @@
 import { User } from '@src/database/entity';
 import { AppError } from '@src/shared/errors/app-error';
-import { sign } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 import { AuthenticateUserDTO } from '../../dtos/AuthenticateUserDTO';
 import { IHashProvider } from '../../providers/HashProvider/interfaces/IHashProvider';
+import { IJWTProvider } from '../../providers/JWTProvider/interfaces/IJWTProvider';
 import { IUserRepository } from '../../repositories/interfaces/IUserRepository';
 
 export interface ResponseAuthenticateUser {
-  user?: User;
-  token?: string;
-  error?: string;
-  description?: string;
-  code?: number;
+  user: User;
+  token: string;
 }
 
 @injectable()
 export class AuthenticateUseCase {
   constructor(
     @inject('UserRepository') private userRepository: IUserRepository,
-    @inject('HashProvider') private hashProvider: IHashProvider
+    @inject('HashProvider') private hashProvider: IHashProvider,
+    @inject('JWTProvider') private jwtProvider: IJWTProvider
   ) {}
 
   async execute({
@@ -33,15 +31,11 @@ export class AuthenticateUseCase {
       userExists.password
     );
     if (!passwordMatch) throw new AppError('email/password invalid', 401);
-
-    const token: string = sign({ id: userExists.id }, 'secret', {
-      expiresIn: 3600,
-    });
+    const token: string = this.jwtProvider.generateToken({ id: userExists.id });
 
     return {
       user: userExists,
       token,
-      code: 200,
     };
   }
 }

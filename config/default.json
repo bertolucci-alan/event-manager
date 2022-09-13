@@ -6,6 +6,10 @@
                 "getEvents": "getEventsKey",
                 "getUsers": "getUsersKey"
             }
+        },
+        "logger": {
+            "enable": true,
+            "level": "info"
         }
     }
 }

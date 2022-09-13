@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=develop ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev": "cross-env ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/src/index.js",
     "test": "yarn lint && yarn lint:fix && yarn test:unit && yarn test:functional",

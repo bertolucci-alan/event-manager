@@ -1,0 +1,440 @@
+{
+    "info": {
+      "version": "1.0.0",
+      "title": "Event Manager",
+      "description": "Event Manager API",
+      "license": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/api",
+        "description": "Local server"
+      }
+    ],
+    "paths": {
+      "/users": {
+        "post": {
+          "description": "Create a new User",
+          "operationId": "createUser",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "The user has been created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserCreatedResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid parameters",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Invalid parameters",
+                    "code": "400",
+                    "error": "Bad Request"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Conflict",
+                    "code": "409",
+                    "error": "Conflict"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/auth": {
+        "post": {
+          "description": "Authenticate the user on the API generating a JWT token",
+          "operationId": "id",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAuth"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "The user has been authenticate and the JWT returned",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AuthenticatedUserResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "User unauthorized",
+                    "code": "401",
+                    "error": "Unauthorized"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/users/:eventId": {
+        "get": {
+          "description": "Get users by event",
+          "operationId": "getUsers",
+          "parameters": [
+            {
+              "name": "authorization",
+              "in": "header",
+              "schema": {
+                "$ref": "#/components/schemas/jwtToken"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of users",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserProfileResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "User not found",
+                    "code": "404",
+                    "error": "Not Found"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/institutes": {
+        "post": {
+          "description": "Create a new Institute",
+          "operationId": "createInstitute",
+          "parameters": [
+            {
+              "name": "authorization",
+              "in": "header",
+              "schema": {
+                "$ref": "#/components/schemas/jwtToken"
+              },
+              "required": true
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Beach"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "The Institute has been created!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BeachCreatedResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Error validating the institute data.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "message": "Error validating institute data",
+                    "code": "400",
+                    "error": "Bad Request"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/events": {
+        "get": {
+          "description": "Create a new Event",
+          "operationId": "craeteEvent",
+          "parameters": [
+            {
+              "name": "authorization",
+              "in": "header",
+              "schema": {
+                "$ref": "#/components/schemas/jwtToken"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "The Event has been created!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TimeForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/events/attend/:eventId": {
+        "get": {
+          "description": "Create a new Attend",
+          "operationId": "craeteAttend",
+          "parameters": [
+            {
+              "name": "authorization",
+              "in": "header",
+              "schema": {
+                "$ref": "#/components/schemas/jwtToken"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Attend created!",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TimeForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "jwtToken": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP"
+        },
+        "name": {
+          "type": "string",
+          "example": "John Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "john@mail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345#@$$%"
+        },
+        "balance": {
+          "type": "number",
+          "example": 200
+        },
+        "instituteName": {
+          "type": "string",
+          "example": "PACK Institute"
+        },
+        "instituteCNPJ": {
+          "type": "string",
+          "example": "XX. XXX. XXX/0000-X1"
+        },
+        "eventName": {
+          "type": "string",
+          "example": "PACK Party"
+        },
+        "eventDescription": {
+          "type": "string",
+          "example": "PACK Party!!!"
+        },
+        "eventRating": {
+          "type": "string",
+          "example": "FREE"
+        },
+        "eventPrice": {
+          "type": "number",
+          "example": 10
+        },
+        "eventStartDate": {
+          "type": "string",
+          "example": "2022-09-09 22:30:00"
+        },
+        "eventEndDate": {
+          "type": "string",
+          "example": "2022-09-09 22:30:00"
+        },
+        "id":{
+          "type": "number",
+          "example": "1"
+        },
+        "beachPosition": {
+          "type": "string",
+          "enum": ["N", "S", "W", "E"],
+          "example": "S"
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "$ref": "#/components/schemas/name"
+            },
+            "email": {
+              "$ref": "#/components/schemas/email"
+            },
+            "password": {
+              "$ref": "#/components/schemas/password"
+            },
+            "balance": {
+                "$ref": "#/components/schemas/balance"
+            }
+          }
+        },
+        "Institute": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "$ref": "#/components/schemas/instituteName"
+            },
+            "CNPJ": {
+              "$ref": "#/components/schemas/instituteCNPJ"
+            }
+          }
+        },
+        "Event": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/eventName"
+              },
+              "description": {
+                "$ref": "#/components/schemas/eventDescription"
+              },
+              "rating": {
+                "$ref": "#/components/schemas/eventRating"
+              },
+              "price": {
+                "$ref": "#/components/schemas/eventPrice"
+              },
+              "start_date": {
+                "$ref": "#/components/schemas/eventStartDate"
+              },
+              "end_date": {
+                "$ref": "#/components/schemas/eventEndDate"
+              }              
+            }
+          },
+        "UserAuth": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "$ref": "#/components/schemas/email"
+            },
+            "password": {
+              "$ref": "#/components/schemas/password"
+            }
+          }
+        },
+        "UserProfileResponse": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "$ref": "#/components/schemas/name"
+                },
+                "email": {
+                  "$ref": "#/components/schemas/email"
+                },
+                "password": {
+                  "$ref": "#/components/schemas/password"
+                },
+                "id": {
+                  "$ref": "#/components/schemas/id"
+                }
+              }
+            }
+          }
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "type": "number"
+            },
+            "message": {
+              "type": "string"
+            },
+            "errors": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }

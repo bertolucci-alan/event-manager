@@ -28,6 +28,11 @@ export class AttendEventUseCase {
       users: [...eventExists.users, userExists],
     });
 
+    await this.userRepository.update(authId, {
+      ...userExists,
+      balance: userExists.balance - eventExists.price,
+    });
+
     return event;
   }
 }

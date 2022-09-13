@@ -32,14 +32,10 @@ export class CreateEventUseCase {
       userExists,
       instituteByUser
     );
-    const eventWithUsers = await this.eventRepository.findById(event.id, {
-      relations: ['users'],
-    });
-    if (!eventWithUsers) throw new AppError('Users not found', 404);
 
     const eventAttend = await this.eventRepository.update(event.id, {
-      ...eventWithUsers,
-      users: [...eventWithUsers.users, userExists],
+      ...event,
+      users: [userExists],
     });
 
     const cachedEvents = await this.cacheService.getCache<Event[]>(

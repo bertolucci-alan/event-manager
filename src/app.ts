@@ -3,6 +3,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { routes } from '@src/routes';
 import config from 'config';
+import expressPino from 'express-pino-logger';
+import logger from '@src/util/logger';
 
 export class SetupServer {
   public server: Express = express();
@@ -14,7 +16,7 @@ export class SetupServer {
 
   public start(): void {
     this.getApp().listen(this.port, () =>
-      console.log(`Server is running on port ${this.port}`)
+      logger.info(`Server is running on port ${this.port}`)
     );
   }
 
@@ -30,6 +32,7 @@ export class SetupServer {
         extended: true,
       })
     );
+    this.server.use(expressPino({ logger }));
   }
 
   private cors(): void {

@@ -7,6 +7,7 @@ import {
   DB_PASSWORD,
   DB_DATABASE,
 } from '@src/config/env';
+import logger from '@src/util/logger';
 
 export const dataSource: DataSource = new DataSource({
   name: NODE_ENV,
@@ -20,4 +21,4 @@ export const dataSource: DataSource = new DataSource({
   synchronize: true,
 });
 
-dataSource.initialize().then(() => console.log('Data source initialized'));
+dataSource.initialize().then(() => logger.info('Data source initialized'));

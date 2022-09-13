@@ -5,6 +5,7 @@ import '@src/shared/container';
 
 import { SetupServer } from './app';
 import { dataSource } from '@src/database/index';
+import logger from './util/logger';
 
 enum ExitStatus {
   Failure = 1,
@@ -12,14 +13,14 @@ enum ExitStatus {
 }
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.log(
+  logger.info(
     `App exiting due an unhadle promise: ${promise} and reason: ${reason}`
   );
   throw reason;
 });
 
 process.on('uncaughtException', (err) => {
-  console.log(`App exting due to an uncaught exception: ${err}`);
+  logger.info(`App exting due to an uncaught exception: ${err}`);
   process.exit(ExitStatus.Failure);
 });
 
@@ -32,15 +33,15 @@ try {
     process.on(exitSignal, async () => {
       try {
         await dataSource.destroy();
-        console.log('App exited with success');
+        logger.info('App exited with success');
         process.exit(ExitStatus.Success);
       } catch (err) {
-        console.log(`Api exited with error: ${err}`);
+        logger.error(`Api exited with error: ${err}`);
         process.exit(ExitStatus.Failure);
       }
     });
   }
 } catch (err) {
-  console.log(`App exited with error: ${err}`);
+  logger.error(`App exited with error: ${err}`);
   process.exit(ExitStatus.Failure);
 }

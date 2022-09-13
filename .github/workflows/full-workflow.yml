@@ -14,18 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: event_manager_test
-        ports:
-          - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     strategy:
       matrix:
         node-version: [16.x]
@@ -33,13 +21,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Build the Postgres stack
+        working-directory: event_manager_api
+        run: docker-compose up -d
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
       - name: Use Node.js ${{matrix.node-version}}
         uses: actions/setup-node@v1
         with:
           node-version: ${{matrix.node-version}}
 
       - name: Install dependencies
-        run: yarn cache clean && yarn --frozen-lockfile && yarn build
+        run: yarn --frozen-lockfile
 
       - name: Run all tests
         run: yarn test
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}

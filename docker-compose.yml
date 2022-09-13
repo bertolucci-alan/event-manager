@@ -20,9 +20,9 @@ services:
     container_name: db
     image: 'postgres:alpine'
     environment:
+      - POSTGRES_MULTIPLE_DATABASES=event_manager,event_manager_test
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=event_manager
     ports:
       - '5432:5432'
     volumes:

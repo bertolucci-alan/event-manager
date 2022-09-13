@@ -23,26 +23,24 @@ process.on('uncaughtException', (err) => {
   process.exit(ExitStatus.Failure);
 });
 
-(async (): Promise<void> => {
-  try {
-    const server = new SetupServer();
-    server.start();
+try {
+  const server = new SetupServer();
+  server.start();
 
-    const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT'];
-    for (const exitSignal of exitSignals) {
-      process.on(exitSignal, async () => {
-        try {
-          await dataSource.destroy();
-          console.log('App exited with success');
-          process.exit(ExitStatus.Success);
-        } catch (err) {
-          console.log(`Api exited with error: ${err}`);
-          process.exit(ExitStatus.Failure);
-        }
-      });
-    }
-  } catch (err) {
-    console.log(`App exited with error: ${err}`);
-    process.exit(ExitStatus.Failure);
+  const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT'];
+  for (const exitSignal of exitSignals) {
+    process.on(exitSignal, async () => {
+      try {
+        await dataSource.destroy();
+        console.log('App exited with success');
+        process.exit(ExitStatus.Success);
+      } catch (err) {
+        console.log(`Api exited with error: ${err}`);
+        process.exit(ExitStatus.Failure);
+      }
+    });
   }
-})();
+} catch (err) {
+  console.log(`App exited with error: ${err}`);
+  process.exit(ExitStatus.Failure);
+}
